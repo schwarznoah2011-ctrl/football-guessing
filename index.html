@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light"><title>Football Guessing – Das Fußball-Rateduell</title><meta name="description" content="Errate den Geheimprofi deines Gegners: 1000 Fußballer aus den Top-5-Ligen und 50 Ikonen. Online-Duell oder lokal auf einem Gerät."><meta property="og:title" content="Football Guessing"><meta property="og:description" content="Das Fußball-Rateduell für zwei Spieler. Jetzt mitspielen!"><meta property="og:type" content="website"><meta name="theme-color" content="#19b36b"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="favicon.svg"><link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#d6ebfa;--ink:#0f2742;--mut:#5b7089;--card:#ffffffb8;--line:#0f274217;--g:#19b36b;--lime:#19b36b;--mint:#13a35f;--b:#2f8cf0;--red:#e0405a;--grad:linear-gradient(135deg,#19b36b,#14a6a0 55%,#2f8cf0);--r:22px;--sh:0 12px 40px #2f6fa824;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*:before,*:after{box-sizing:inherit}html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;color:var(--ink);font:15px/1.5 Sora,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+.bgfx{position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 500px at 5% 0,#fff 0,transparent 60%),radial-gradient(800px 600px at 100% 8%,#b9ddf6 0,transparent 60%),radial-gradient(700px 500px at 50% 115%,#c6efd9 0,transparent 60%),var(--bg);overflow:hidden}
+.bgfx:before{content:"";position:absolute;width:640px;height:640px;border:2px solid #ffffffaa;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}.bgfx:after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:#ffffffaa}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s,background .15s}button:disabled{opacity:.45;cursor:not-allowed}button:active:not(:disabled){transform:scale(.95)!important}.hidden{display:none!important}
+section:not(.hidden){animation:up .45s cubic-bezier(.2,.8,.2,1) both}@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.wrap{max-width:1080px;margin:auto;padding:0 18px 48px}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 0;margin-bottom:6px}
+.logo{display:flex;gap:11px;align-items:center}.logo i{font-style:normal;width:40px;height:40px;border-radius:13px;background:var(--grad);display:grid;place-items:center;font-size:21px;box-shadow:0 8px 20px #19a38a44}.logo b{display:block;font-size:15px;font-weight:800;letter-spacing:.06em;line-height:1.1}.logo span{font-size:10px;font-weight:700;letter-spacing:.3em;color:var(--g)}
+.hr{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.by{font-size:11px;font-weight:700;color:#fff;background:var(--grad);padding:8px 14px;border-radius:99px;box-shadow:0 6px 18px #2f8cf044}
+.chip,.ic{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--mut);background:#ffffffc8;border:1px solid var(--line);padding:8px 13px;border-radius:99px}.ic{width:36px;height:36px;padding:0;display:grid;place-items:center;font-size:15px;color:inherit}
+.card{background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid #fff;box-shadow:var(--sh);border-radius:var(--r);padding:24px}
+h1{font-size:clamp(40px,7vw,74px);line-height:.98;letter-spacing:-.045em;margin:14px 0 16px;font-weight:800}h1 em,h2 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}h2{font-size:clamp(24px,3.6vw,34px);letter-spacing:-.03em;margin:6px 0 6px;font-weight:800}
+.eb{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--g)}.mut,.lead{color:var(--mut)}.lead{font-size:16px;max-width:470px}.lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--mut);margin:16px 0 7px}
+.in{width:100%;background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;outline:0;transition:.15s}.in:focus{border-color:var(--b);box-shadow:0 0 0 4px #2f8cf022}
+.btn{padding:13px 20px;border-radius:14px;font-weight:700;background:#fff;border:1px solid var(--line);box-shadow:0 2px 8px #2f6fa714}.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px #2f6fa722}.btn.go{background:var(--grad);color:#fff;border:0;box-shadow:0 10px 26px #19a38a44}.btn.go:disabled{color:#fff}
+.act{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.act>*{flex:1;min-width:140px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center;padding:24px 0 10px}.hl{position:relative}
+.steps{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}.steps div{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;background:#ffffffb0;border:1px solid #fff;padding:9px 14px 9px 9px;border-radius:99px}.steps b{width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:12px}
+.fcs{display:flex;gap:12px;margin-top:30px}.fc{width:84px;height:112px;border-radius:16px;display:grid;place-items:center;font-size:40px;font-weight:800;color:#fff;box-shadow:var(--sh);animation:fl 4s ease-in-out infinite}.fc:nth-child(1){background:linear-gradient(150deg,#19b36b,#0f8a6a);transform:rotate(-8deg)}.fc:nth-child(2){background:linear-gradient(150deg,#2f8cf0,#1e5fc4);animation-delay:-1.3s}.fc:nth-child(3){background:linear-gradient(150deg,#f5a524,#e0683a);transform:rotate(8deg);animation-delay:-2.6s}@keyframes fl{50%{translate:0 -10px}}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#0f27420d;padding:5px;border-radius:15px}.seg button{padding:10px 4px;border-radius:11px;background:transparent;font-weight:700;font-size:13px;color:var(--mut)}.seg button.on{background:#fff;color:var(--ink);box-shadow:0 3px 10px #2f6fa722}
+.names{display:grid;grid-template-columns:1fr 1fr;gap:12px}.or{display:flex;align-items:center;gap:12px;margin:18px 0 4px;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--mut)}.or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
+.warn{border:1px solid #e0405a44;background:#fde8ec;padding:12px;border-radius:12px;margin-top:14px;font-size:13px}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:26px}.feat div{background:#ffffffa0;border:1px solid #fff;border-radius:18px;padding:16px;font-size:13px;color:var(--mut)}.feat b{display:block;font-size:22px;color:var(--ink);letter-spacing:-.02em}
+.code{font-size:clamp(46px,14vw,84px);font-weight:800;letter-spacing:.16em;text-align:center;padding:14px 0 14px .16em;background:#fff;border:2px dashed #2f8cf055;border-radius:18px;margin:18px 0;background-image:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--mint);animation:p 1.6s infinite;margin-right:7px}@keyframes p{0%{box-shadow:0 0 0 0 #13a35f99}70%,100%{box-shadow:0 0 0 11px #0000}}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 4px}.chips button{padding:8px 15px;border-radius:99px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:700;color:var(--mut)}.chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin:16px 0;max-height:54vh;overflow:auto;padding:6px 4px}
+.board{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;padding:16px 20px;margin-bottom:14px}
+.pp{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:18px;border:2px solid transparent;transition:.25s}.pp.r{flex-direction:row-reverse;text-align:right}.pp.act2{background:#19b36b14;border-color:var(--g);box-shadow:0 0 0 5px #19b36b14}
+.dot{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:18px;background:var(--grad);color:#fff;flex:none}.pp small{display:block;font-size:10px;color:var(--mut);letter-spacing:.12em;font-weight:700}.pp b{font-size:15px}
+.sc{text-align:center}.sc span{display:block;font-size:40px;font-weight:800;letter-spacing:.04em;line-height:1}.sc small{display:inline-block;margin-top:8px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--mut);background:#0f27420d;padding:3px 10px;border-radius:99px}
+.banner{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:13px 18px;border-radius:16px;font-weight:700;margin-bottom:14px;background:#ffffffb8;border:1px solid #fff}.banner.me{background:var(--grad);color:#fff;box-shadow:0 10px 26px #19a38a44}
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:start}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#0f27420d;padding:5px;border-radius:15px;margin-bottom:16px}.tab{padding:11px 6px;border-radius:11px;background:transparent;font-weight:700;font-size:13px;color:var(--mut)}.tab.on{background:#fff;color:var(--ink);box-shadow:0 3px 10px #2f6fa722}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.wait .fg,.wait #gsel{opacity:.55}
+.meter{height:8px;border-radius:9px;background:#0f27420f;overflow:hidden;margin:8px 0 14px}.meter i{display:block;height:100%;width:100%;background:var(--grad);border-radius:9px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.ck{display:inline-block;margin:4px 5px 0 0;padding:4px 11px;border-radius:99px;font-size:12px;font-weight:700}.ck.y{background:#d3f4e1;color:#0f7a43}.ck.n{background:#fde1e6;color:#b4233f}.ck.m{background:#fff0bd;color:#8a5a00}
+.hist{max-height:320px;overflow:auto}.h{padding:11px 13px;border-radius:14px;background:#fff;margin-bottom:8px;font-size:13px;border:1px solid var(--line)}.h b{color:var(--ink)}.yes{color:var(--mint);font-weight:700}.no{color:var(--red);font-weight:700}
+.hist.fresh .h:first-child .ck{animation:pop .4s both}.hist.fresh .h:first-child .ck:nth-child(3){animation-delay:.12s}.hist.fresh .h:first-child .ck:nth-child(4){animation-delay:.24s}.hist.fresh .h:first-child .ck:nth-child(5){animation-delay:.36s}@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+.trophy{font-size:64px;animation:fl 2.6s ease-in-out infinite}.res-s{font-size:54px;font-weight:800;letter-spacing:.05em}.rv{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.rv>div{padding:16px;border-radius:16px;background:#fff;border:1px solid var(--line)}
+#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:14px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:9;max-width:92vw;text-align:center;box-shadow:0 12px 30px #0f274244}#toast.on{opacity:1;transform:translate(-50%,0)}
+.rip{position:absolute;border-radius:50%;background:#ffffffaa;transform:scale(0);animation:rp .55s ease-out;pointer-events:none}@keyframes rp{to{transform:scale(3);opacity:0}}
+.cf{position:fixed;top:-14px;width:9px;height:14px;z-index:20;border-radius:2px;pointer-events:none;animation:fall 2.2s ease-in forwards}@keyframes fall{to{transform:translate(var(--x),105vh) rotate(720deg)}}
+@media(max-width:780px){.hero,.two{grid-template-columns:1fr}.fcs{display:none}.board{grid-template-columns:1fr 1fr}.sc{grid-column:1/-1;order:-1}.feat{grid-template-columns:1fr}.by{display:none}}
+@media(max-width:430px){.names,.fg,.rv{grid-template-columns:1fr}.card{padding:18px}}
+.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:20px 14px;padding:14px 8px 22px}
+.pl{display:block;width:100%;background:none;border:0;padding:0;border-radius:0;overflow:visible;position:relative;text-align:left;filter:drop-shadow(0 8px 12px #0f274233);transition:transform .2s,filter .2s}
+.pl:hover{transform:translateY(-6px) scale(1.03)}.pl.sel{transform:translateY(-6px) scale(1.04);filter:drop-shadow(0 0 2px #19b36b) drop-shadow(0 0 14px #19b36bcc)}
+.pl.sel:after{content:"✓";position:absolute;top:0;right:2px;width:26px;height:26px;border-radius:50%;background:var(--g);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800;z-index:3;box-shadow:0 3px 10px #0004}
+.fut{--cp:polygon(13% 0,87% 0,100% 5%,100% 88%,50% 100%,0 88%,0 5%);position:relative;aspect-ratio:3/4.35;clip-path:var(--cp);background:linear-gradient(145deg,#fbeaa0,#c99a2e 50%,#f6dc83);color:#fff}
+.fi{position:absolute;inset:3px;clip-path:var(--cp);overflow:hidden;background:linear-gradient(160deg,#16314f,#2f8cf0)}
+.fi:before{content:"";position:absolute;width:150%;aspect-ratio:1;border-radius:50%;border:2px solid #ffffff22;left:-25%;top:-14%}.fi:after{content:"";position:absolute;left:0;right:0;top:34%;height:2px;background:#ffffff1c}
+.po-TW{--bgc:linear-gradient(160deg,#2b3440,#c4cfdb 62%,#2b3440)}.po-IV{--bgc:linear-gradient(160deg,#0a2a66,#2f6fe0 62%,#0a2a66)}.po-LV{--bgc:linear-gradient(160deg,#064a5e,#17c1d9 62%,#064a5e)}.po-RV{--bgc:linear-gradient(160deg,#2a1a6e,#6b5bff 62%,#2a1a6e)}.po-ZDM{--bgc:linear-gradient(160deg,#0b4a46,#19c7b0 62%,#0b4a46)}.po-ZM{--bgc:linear-gradient(160deg,#14501e,#3fcf5a 62%,#14501e)}.po-ZOM{--bgc:linear-gradient(160deg,#7a5200,#ffbf1f 62%,#7a5200)}.po-LM{--bgc:linear-gradient(160deg,#7a1a6e,#ee55d6 62%,#7a1a6e)}.po-RM{--bgc:linear-gradient(160deg,#3b1a7a,#9b6bff 62%,#3b1a7a)}.po-LF{--bgc:linear-gradient(160deg,#6b0c26,#f0364f 62%,#6b0c26)}.po-RF{--bgc:linear-gradient(160deg,#7a2a05,#ff7a1f 62%,#7a2a05)}.po-ST{--bgc:linear-gradient(160deg,#08080c,#3a3a4a 62%,#08080c)}.fut .fi{background:var(--bgc)}.po-ST .nm,.po-ST .ps b{color:#f6dc83}.pleg{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:11px;font-weight:700;color:var(--mut);margin:12px 0 0}.pleg span{display:flex;align-items:center;gap:5px}.pleg i{width:15px;height:15px;border-radius:5px;background:var(--bgc);box-shadow:0 1px 4px #0003}
+.sh{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#ffffff55 46%,transparent 62%);transform:translateX(-130%);z-index:2;pointer-events:none}.pl:hover .sh{transform:translateX(130%);transition:transform .8s}
+.ps{position:absolute;left:9%;top:10%;width:27%;display:flex;flex-direction:column;align-items:center;gap:5px;z-index:1}.ps b{font-size:clamp(16px,2.5vw,22px);font-weight:800;line-height:1;text-shadow:0 2px 6px #0006}.ps .ln{width:70%;height:2px;background:#ffffff77;border-radius:2px}.ps .fl{font-size:19px;line-height:1}.ps svg{width:100%;max-width:34px;filter:drop-shadow(0 2px 3px #0005)}
+.ar{position:absolute;left:30%;right:-2%;top:7%;bottom:27%}.ar svg{width:100%;height:100%;filter:drop-shadow(0 6px 8px #0006)}
+.nm{position:absolute;left:7%;right:7%;bottom:17.5%;text-align:center;font-weight:800;font-size:clamp(10px,1.6vw,13px);letter-spacing:.05em;text-shadow:0 2px 6px #0008;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:1}
+.nm:after{content:"";display:block;width:60%;height:2px;margin:5px auto 0;background:linear-gradient(90deg,transparent,#f6dc83,transparent)}
+.cl{position:absolute;left:12%;right:12%;bottom:10.5%;text-align:center;font-size:9px;font-weight:700;letter-spacing:.14em;opacity:.88;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;z-index:1}
+.rv .pl{width:150px;margin:10px auto 0;pointer-events:none}
+.bgfx i{position:absolute;border-radius:50%;filter:blur(50px);opacity:.55;animation:drift 18s ease-in-out infinite}.bgfx i:nth-child(1){width:380px;height:380px;background:#9fe3c4;left:-80px;top:22%}.bgfx i:nth-child(2){width:420px;height:420px;background:#a9d4f7;right:-100px;top:-60px;animation-delay:-6s}.bgfx i:nth-child(3){width:300px;height:300px;background:#fff;left:45%;bottom:-80px;animation-delay:-11s}@keyframes drift{50%{transform:translate(60px,-40px) scale(1.15)}}
+.logo i{animation:bnc 2.4s ease-in-out infinite}@keyframes bnc{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(14deg)}}
+h1 em,h2 em{background-image:linear-gradient(90deg,#19b36b,#14a6a0,#2f8cf0,#14a6a0,#19b36b);background-size:200% 100%;animation:gs 5s linear infinite}@keyframes gs{to{background-position:-200% 0}}
+.hl>*{animation:up .7s cubic-bezier(.2,.8,.2,1) backwards}.hl>:nth-child(2){animation-delay:.08s}.hl>:nth-child(3){animation-delay:.16s}.hl>:nth-child(4){animation-delay:.24s}.hl>:nth-child(5){animation-delay:.32s}
+.hero>.card{animation:inR .7s .15s cubic-bezier(.2,.8,.2,1) backwards}@keyframes inR{from{opacity:0;transform:translateX(30px)}}
+.steps div{animation:pop .5s backwards}.steps div:nth-child(1){animation-delay:.35s}.steps div:nth-child(2){animation-delay:.47s}.steps div:nth-child(3){animation-delay:.59s}
+.feat div{animation:up .6s backwards;transition:transform .2s,box-shadow .2s}.feat div:nth-child(1){animation-delay:.4s}.feat div:nth-child(2){animation-delay:.52s}.feat div:nth-child(3){animation-delay:.64s}.feat div:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+.btn.go:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#ffffff66 50%,transparent 70%);transform:translateX(-120%);pointer-events:none}.btn.go:hover:not(:disabled):before{transform:translateX(120%);transition:transform .7s}
+#bCreate,#bConfirm:not(:disabled){animation:glow 2.4s ease-in-out infinite}@keyframes glow{50%{box-shadow:0 10px 38px #19a38a99}}
+.grid.ani .pl{animation:cardIn .5s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0)*28ms)}@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.9) rotate(-2deg)}}
+.pl.sel .fut{animation:sway 2.6s ease-in-out infinite}@keyframes sway{50%{transform:translateY(-3px) rotate(-1deg)}}
+.pp.act2{animation:ring 2s ease-in-out infinite}@keyframes ring{50%{box-shadow:0 0 0 10px #19b36b0d}}.pp.act2 .dot{animation:bnc 1.6s ease-in-out infinite}
+.banner.flash{animation:flash .6s cubic-bezier(.2,.8,.2,1)}@keyframes flash{from{transform:scale(.96);opacity:.35}to{transform:none;opacity:1}}
+.bump{animation:bump .6s}@keyframes bump{40%{transform:scale(1.4);color:var(--g)}}
+.hist.fresh .h:first-child{animation:slideIn .45s cubic-bezier(.2,.8,.2,1)}@keyframes slideIn{from{opacity:0;transform:translateX(-18px)}}
+.meter i:after{content:"";display:block;height:100%;width:40%;background:linear-gradient(90deg,transparent,#ffffff88,transparent);animation:shim 2s linear infinite}@keyframes shim{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+#t1:not(.hidden),#t2:not(.hidden){animation:up .3s both}
+.rv .pl{animation:flip .8s .3s cubic-bezier(.2,.8,.2,1) backwards}@keyframes flip{from{opacity:0;transform:perspective(600px) rotateY(90deg) scale(.8)}}
+#resT{animation:pop .6s backwards}.res-s{animation:pop .6s .15s backwards}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+.ico{width:1.2em;height:1.2em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.22em;flex:none}.btn .ico,.tab .ico,.chip .ico,.by .ico{margin-right:7px}.ic .ico{width:19px;height:19px;margin:0}.by .ico{width:13px;height:13px;vertical-align:-.12em;margin-right:6px}
+.ball{width:26px;height:26px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;color:#fff;animation:spinb 10s linear infinite}@keyframes spinb{to{transform:rotate(360deg)}}
+.logo i{box-shadow:0 8px 20px #19a38a44,inset 0 0 0 1px #ffffff55}.trophy{line-height:1}
+.themebox{display:flex;align-items:center;gap:6px;padding:4px 6px 4px 12px;cursor:pointer}.themebox .ico{margin:0}.themebox select{border:0;background:transparent;font:inherit;font-weight:700;letter-spacing:.04em;color:var(--ink);outline:0;cursor:pointer;padding:4px 2px}
+html[data-theme=light]{--bg:#f4f6fa;--card:#ffffffd9;--line:#0f274218;--sh:0 12px 36px #0f274218}
+[data-theme=light] .bgfx{background:radial-gradient(700px 500px at 5% 0,#fff 0,transparent 60%),radial-gradient(800px 600px at 100% 8%,#e9eff8 0,transparent 60%),var(--bg)}
+[data-theme=light] .bgfx:before{border-color:#0f274212}[data-theme=light] .bgfx:after{background:#0f274212}[data-theme=light] .bgfx i{opacity:.4;background:#dce7f6!important}
+html[data-theme=dark]{--bg:#0b1220;--ink:#e8eefb;--mut:#93a4bf;--card:#151f33cc;--line:#ffffff1c;--sh:0 12px 40px #0007;color-scheme:dark}
+[data-theme=dark] .bgfx{background:radial-gradient(700px 500px at 5% 0,#1a2a4a 0,transparent 60%),radial-gradient(800px 600px at 100% 8%,#12304f 0,transparent 60%),radial-gradient(700px 500px at 50% 115%,#0f3a33 0,transparent 60%),var(--bg)}
+[data-theme=dark] .bgfx:before{border-color:#ffffff12}[data-theme=dark] .bgfx:after{background:#ffffff12}[data-theme=dark] .bgfx i{opacity:.28!important}[data-theme=dark] .bgfx i:nth-child(1){background:#1fa36a!important}[data-theme=dark] .bgfx i:nth-child(2){background:#2f6fe0!important}[data-theme=dark] .bgfx i:nth-child(3){background:#6b4bd6!important}
+[data-theme=dark] .card{border-color:#ffffff1a}[data-theme=dark] .in,[data-theme=dark] .btn:not(.go),[data-theme=dark] .chips button,[data-theme=dark] .h,[data-theme=dark] .rv>div{background:#1b2742;color:var(--ink)}
+[data-theme=dark] .chip,[data-theme=dark] .ic{background:#1b2742cc;color:var(--ink)}[data-theme=dark] .tab.on,[data-theme=dark] .seg button.on{background:#27355a;color:var(--ink)}[data-theme=dark] .chips button.on{background:#e8eefb;color:#0b1220}
+[data-theme=dark] .steps div,[data-theme=dark] .feat div,[data-theme=dark] .banner:not(.me){background:#ffffff0f;border-color:#ffffff14}[data-theme=dark] .seg,[data-theme=dark] .tabs,[data-theme=dark] .meter,[data-theme=dark] .sc small{background:#ffffff12}
+[data-theme=dark] select option{background:#1b2742;color:#e8eefb}[data-theme=dark] .warn{color:#ffb3c0;background:#3a1a24;border-color:#e0405a66}[data-theme=dark] #toast{background:#27355a}[data-theme=dark] .pp.act2{background:#19b36b1f}
+[data-theme=dark] .ck.y{background:#12402a;color:#7ee2a8}[data-theme=dark] .ck.n{background:#4a1d28;color:#ffb0bd}[data-theme=dark] .ck.m{background:#4a3d12;color:#ffd978}
+.seg{grid-template-columns:repeat(2,1fr)}
+</style>
+<script>try{var t=JSON.parse(localStorage.getItem("fg_theme"));if(t)document.documentElement.dataset.theme=t}catch(e){}</script></head><body><div class="bgfx"><i></i><i></i><i></i></div><div class="wrap">
+<header class="bar"><div class="logo"><i><svg class="ball" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><path d="M24 15L32.6 21.2L29.3 31.3H18.7L15.4 21.2Z" fill="currentColor"/><path d="M24 15V7M32.6 21.2L40.2 18.7M29.3 31.3L34 37.8M18.7 31.3L14 37.8M15.4 21.2L7.8 18.7"/></svg></i><div><b>FOOTBALL</b><span>GUESSING</span></div></div><div class="hr"><label class="chip themebox" title="Farbdesign"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18z" fill="currentColor"/></svg><select id="themeSel" aria-label="Farbdesign"><option value="blue">Babyblau</option><option value="light">Hell</option><option value="dark">Dunkel</option></select></label><button class="chip hidden" id="bHome" style="color:var(--ink);cursor:pointer"><svg class="ico" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg> Start</button><div class="by"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16zM14 6l3 3"/></svg> Ersteller: Noah Schwarz</div><button class="ic" id="bMute"></button><div id="top" class="chip"><span class="pulse"></span>ONLINE</div></div></header>
+
+<section id="v-home"><div class="hero"><div class="hl"><div class="eb">DAS FUSSBALL-RATEDUELL</div><h1>Kennst du den <em>Profi?</em></h1><p class="lead">Wähle heimlich einen Star aus den Top-5-Ligen und finde den Geheimprofi deines Gegners. Mit cleveren Hinweisen statt Glück.</p>
+<div class="steps"><div><b>1</b>Profi wählen</div><div><b>2</b>Hinweise prüfen</div><div><b>3</b>Spieler erraten</div></div><div class="fcs"><div class="fc">?</div><div class="fc">?</div><div class="fc">?</div></div></div>
+<div class="card"><div id="invite" class="hidden" style="background:linear-gradient(135deg,#19b36b22,#2f8cf022);border:1.5px solid #19b36b66;border-radius:16px;padding:14px;margin-bottom:16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><b>Einladung erkannt</b><div class="mut" style="font-size:13px">Raum <b id="invCode"></b> wartet auf dich. Gib oben deinen Namen ein.</div></div><button class="btn go" id="bInv">Jetzt beitreten →</button></div><div class="names"><div><label class="lbl" style="margin-top:0">DEIN NAME</label><input class="in" id="name" maxlength="18" value="Spieler"></div><div><label class="lbl" style="margin-top:0">SPIELER 2 (LOKAL)</label><input class="in" id="name2" maxlength="18" value="Spieler 2"></div></div>
+<label class="lbl">MODUS</label><div class="seg" id="seg"><button data-m="classic" class="on">Classic</button><button data-m="timed">⏱ 60 Sek.</button><button data-m="bo3">Best of 3</button><button data-m="icons">★ Ikonen</button></div>
+<div class="act"><button class="btn go" id="bCreate"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg> Online-Raum erstellen</button><button class="btn" id="bLocal"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Lokal (1 Gerät)</button></div>
+<div id="netmsg" class="mut" style="font-size:12px;margin-top:12px;font-weight:600">Prüfe Online-Verbindung …</div><div class="or">ODER BEITRETEN</div><div class="act" style="margin-top:12px"><input class="in" id="code" maxlength="4" placeholder="CODE" style="text-transform:uppercase;letter-spacing:.35em;font-weight:800;text-align:center;flex:2"><button class="btn" id="bJoin" style="flex:1">Beitreten →</button></div><div id="rooms"></div><button class="btn" id="bSite" style="width:100%;margin-top:14px"><svg class="ico" viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg> Website-Link an Freund senden</button>
+<div id="offline" class="warn hidden">Der Online-Modus ist hier nicht erreichbar, weil kein Spielserver verbunden ist. Der lokale Modus funktioniert trotzdem.</div></div></div>
+<div class="feat"><div><b>1000</b>Profis aus 96 Vereinen</div><div><b>5 Ligen</b>Premier League, LaLiga, Serie A, Ligue 1, Bundesliga</div><div><b>2 Modi</b>Online-Duell oder lokal auf einem Gerät</div></div></section>
+
+<section id="v-hand" class="card hidden" style="max-width:540px;margin:40px auto;text-align:center"><div style="line-height:1"><svg class="ico" viewBox="0 0 24 24" style="width:54px;height:54px;color:#2f8cf0;stroke-width:1.6"><path d="M7 7h12l-3-3M17 17H5l3 3"/></svg></div><div class="eb">GERÄTEWECHSEL</div><h2 id="hT"></h2><p class="mut" id="hP"></p><button class="btn go" id="hB" style="margin-top:12px"></button></section>
+
+<section id="v-lobby" class="card hidden" style="max-width:540px;margin:40px auto;text-align:center"><div class="eb">WARTERAUM</div><h2>Raumcode <em>teilen</em></h2><p class="mut">Schick deinem Mitspieler den Einladungslink. Er tippt dort nur noch auf „Beitreten“. Alternativ gibt er den Code manuell ein.</p><div class="code" id="lobCode">----</div><p><span class="pulse"></span><span id="lobMsg">Warte auf Mitspieler …</span></p><details class="h" style="text-align:left;margin-top:6px"><summary style="cursor:pointer;font-weight:700">Freund kommt nicht rein?</summary><ol class="mut" style="margin:10px 0 0;padding-left:20px;font-size:13px"><li>Schick ihm den <b>Einladungslink</b> oder die Adresse dieser Website.</li><li>Er öffnet die Seite auf seinem Gerät, das geht ohne Account.</li><li>Dort tippt er in „Offene Räume“ auf Beitreten oder gibt den Raumcode ein.</li></ol></details><div class="act"><button class="btn go" id="bInvite"><svg class="ico" viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg> Einladungslink teilen</button><button class="btn" id="bCopy"><svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg> Code kopieren</button><button class="btn" data-leave>Raum verlassen</button></div></section>
+
+<section id="v-pick" class="card hidden"><div class="eb">RUNDE <span id="pRound">1</span> · GEHEIM WÄHLEN</div><h2>Wähle deinen <em>Geheimprofi</em></h2>
+<div id="pickMain"><input class="in" id="search" placeholder="Name, Verein oder Land suchen …"><div class="chips" id="chips"></div><div class="pleg" id="pleg"></div><div class="grid" id="grid"></div><div class="act" style="align-items:center"><div id="selLbl" class="mut" style="font-weight:600">Noch kein Spieler gewählt.</div><button class="btn go" id="bConfirm" disabled>Auswahl bestätigen →</button></div></div>
+<div id="pickWait" class="hidden" style="text-align:center"><div class="code" style="font-size:30px;letter-spacing:.04em" id="myPickName"></div><p><span class="pulse"></span>Warte auf deinen Gegner …</p></div></section>
+
+<section id="v-game" class="hidden"><div class="card board"><div class="pp" id="ppMe"><div class="dot" id="dMe">D</div><div><small>DU</small><b id="nMe"></b></div></div><div class="sc"><span id="score">0 : 0</span><small id="meta"></small></div><div class="pp r" id="ppOp"><div class="dot" id="dOp" style="background:linear-gradient(135deg,#6ec6ff,#3f6bd8)">G</div><div><small>GEGNER</small><b id="nOp"></b></div></div></div>
+<div class="banner" id="banner"><span id="bTxt"></span><span id="bTime"></span></div>
+<button class="btn go hidden" style="width:100%;margin-bottom:14px" id="bPass">Gerät übergeben →</button>
+<div class="two"><div class="card" id="act"><div class="tabs"><button class="tab on" data-t="t1"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor"/></svg> Hinweise prüfen</button><button class="tab" data-t="t2"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg> Spieler tippen</button></div>
+<div id="t1"><div class="fg"><div><label class="lbl" style="margin-top:0">POSITION</label><select class="in" id="sPos"></select></div><div><label class="lbl" style="margin-top:0">LAND</label><select class="in" id="sNat"></select></div><div><label class="lbl" id="lgLbl">LIGA</label><select class="in" id="sLg"></select></div><div><label class="lbl">VEREIN</label><select class="in" id="sClub"></select></div></div><button class="btn go" style="width:100%;margin-top:18px" id="bProbe">Prüfen →</button><div class="legend"><span class="ck y">✓ richtig</span><span class="ck m">≈ gleiche Positionsgruppe</span><span class="ck n">✕ falsch</span></div></div>
+<div id="t2" class="hidden"><label class="lbl" style="margin-top:0">DEIN TIPP</label><select class="in" id="gsel"></select><label class="mut" style="font-size:12px;display:block;margin:10px 0 14px"><input type="checkbox" id="allp"> alle Spieler zeigen (nicht nur mögliche)</label><button class="btn go" style="width:100%" id="bGuess">Tipp abgeben</button><p class="mut" style="font-size:12px;margin:10px 0 0">Auch ein falscher Tipp liefert ✓/≈/✕ für alle vier Eigenschaften, kostet aber deinen Zug.</p></div></div>
+<div><div class="card"><div class="eb">DEIN WISSEN</div><p id="cnt" style="margin:8px 0 0;font-weight:700"></p><div class="meter"><i id="bar"></i></div><div id="known"></div></div>
+<div class="card" style="margin-top:14px"><div class="eb">VERLAUF</div><div class="hist" id="hist" style="margin-top:10px"></div></div></div></div></section>
+
+<section id="v-res" class="card hidden" style="max-width:640px;margin:40px auto;text-align:center"><div class="trophy"><svg class="ico" viewBox="0 0 24 24" style="width:68px;height:68px;color:#19b36b;stroke-width:1.5"><path d="M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 13v4M8 21h8M10 17h4"/></svg></div><div class="eb">ERGEBNIS</div><h2 id="resT"></h2><div class="res-s" id="resS"></div><div class="rv"><div id="rv0"></div><div id="rv1"></div></div><div class="act"><button class="btn go" id="bNext">Nächste Runde →</button><button class="btn" data-leave>Raum verlassen</button></div></section>
+</div><div id="toast"></div>
+<script>
+window.FG_STANDALONE=true;
+(function(){
+  if(window.claude)return;
+  function mkDb(){
+    const api=async o=>{let r;try{r=await fetch('/api/doc',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(o)})}catch(e){throw Object.assign(new Error('Server nicht erreichbar'),{code:'unavailable'})}
+      const j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||'Fehler'),{code:j.code||'unavailable'});return j};
+    const snap=(p,j)=>({id:p.split('/').pop(),exists:!!j.exists,data:()=>j.data});
+    const watch=(url,fn,err)=>{const es=new EventSource(url);es.onmessage=e=>fn(JSON.parse(e.data));es.onerror=()=>{if(es.readyState===2&&err)err(new Error('Verbindung verloren'))};return()=>es.close()};
+    const doc=p=>({get:async()=>snap(p,await api({op:'get',path:p})),set:async d=>{await api({op:'set',path:p,data:d})},update:async d=>{await api({op:'update',path:p,data:d})},onSnapshot:(next,err)=>watch('/api/watch?path='+encodeURIComponent(p),j=>next(snap(p,j)),err)});
+    const collection=name=>{const q={v:'lobby',n:20},c={where(f,o,v){q.v=v;return c},limit(n){q.n=n;return c},onSnapshot:(next,err)=>watch('/api/query?c='+name+'&f=phase&v='+encodeURIComponent(q.v)+'&limit='+q.n,j=>next({docs:j.docs.map(d=>({id:d.id,exists:true,data:()=>d.data}))}),err)};return c};
+    return{doc,collection};
+  }
+  window.claude={use:async n=>{if(n==='user')return{can:async()=>true};if(n!=='db')return null;try{const r=await fetch('/api/ping',{cache:'no-store'});if(!r.ok)return null}catch(e){return null}return mkDb()}};
+})();
+</script>
+<script>
+const RAW=`PL|Arsenal|Saka,ENG,RF;Ødegaard,Norwegen,ZOM;Saliba,FRA,IV;Raya,ESP,TW;Declan Rice,ENG,ZDM;Gyökeres,Schweden,ST;Martinelli,BRA,LF
+PL|Aston Villa|Emiliano Martínez,ARG,TW;Ollie Watkins,ENG,ST;John McGinn,Schottland,ZM;Youri Tielemans,BEL,ZM;Ezri Konsa,ENG,IV
+PL|Bournemouth|Justin Kluivert,NED,ZOM;Evanilson,BRA,ST;Marcos Senesi,ARG,IV;Illia Zabarnyi,Ukraine,IV
+PL|Brentford|Mikkel Damsgaard,Dänemark,ZOM;Kevin Schade,GER,LF;Kristoffer Ajer,Norwegen,IV;Nathan Collins,Irland,IV
+PL|Brighton|Danny Welbeck,ENG,ST;Kaoru Mitoma,Japan,LF;Bart Verbruggen,NED,TW;Carlos Baleba,Kamerun,ZDM
+PL|Burnley|James Trafford,ENG,TW;Josh Cullen,Irland,ZDM;Zian Flemming,NED,ST
+PL|Chelsea|Cole Palmer,ENG,RF;Enzo Fernández,ARG,ZM;Marc Cucurella,ESP,LV;João Pedro,BRA,ST;Moisés Caicedo,Ecuador,ZDM;Robert Sánchez,ESP,TW;Reece James,ENG,RV
+PL|Crystal Palace|Jean-Philippe Mateta,FRA,ST;Dean Henderson,ENG,TW;Jefferson Lerma,Kolumbien,ZDM;Daniel Muñoz,Kolumbien,RV
+PL|Everton|Jordan Pickford,ENG,TW;Jack Grealish,ENG,LF;Iliman Ndiaye,Senegal,RF;Jarrad Branthwaite,ENG,IV;Idrissa Gueye,Senegal,ZDM
+PL|Fulham|Raúl Jiménez,Mexiko,ST;Alex Iwobi,Nigeria,ZM;Bernd Leno,GER,TW;Joachim Andersen,Dänemark,IV
+PL|Leeds United|Dominic Calvert-Lewin,ENG,ST;Pascal Struijk,NED,IV;Ao Tanaka,Japan,ZDM;Brenden Aaronson,USA,ZOM;Ethan Ampadu,Wales,ZDM
+PL|Liverpool|Mohamed Salah,Ägypten,RF;Virgil van Dijk,NED,IV;Florian Wirtz,GER,ZOM;Dominik Szoboszlai,Ungarn,ZOM;Alisson,BRA,TW;Alexander Isak,Schweden,ST;Alexis Mac Allister,ARG,ZM;Ryan Gravenberch,NED,ZM
+PL|Manchester City|Erling Haaland,Norwegen,ST;Rodri,ESP,ZDM;Phil Foden,ENG,ZOM;Gianluigi Donnarumma,ITA,TW;Rúben Dias,POR,IV;Rayan Cherki,FRA,ZOM;Antoine Semenyo,Ghana,RF;Josko Gvardiol,Kroatien,LV
+PL|Manchester United|Bruno Fernandes,POR,ZOM;Matheus Cunha,BRA,LF;Bryan Mbeumo,Kamerun,RF;Benjamin Šeško,Slowenien,ST;André Onana,Kamerun,TW;Kobbie Mainoo,ENG,ZM;Lisandro Martínez,ARG,IV
+PL|Newcastle United|Bruno Guimarães,BRA,ZM;Anthony Gordon,ENG,LF;Nick Pope,ENG,TW;Sandro Tonali,ITA,ZM;Sven Botman,NED,IV;Nick Woltemade,GER,ST
+PL|Nottingham Forest|Morgan Gibbs-White,ENG,ZOM;Chris Wood,Neuseeland,ST;Matz Sels,BEL,TW;Murillo,BRA,IV
+PL|Sunderland|Granit Xhaka,Schweiz,ZM;Brian Brobbey,NED,ST;Robin Roefs,NED,TW
+PL|Tottenham Hotspur|Mohammed Kudus,Ghana,RF;Micky van de Ven,NED,IV;Guglielmo Vicario,ITA,TW;Cristian Romero,ARG,IV;James Maddison,ENG,ZOM;Richarlison,BRA,ST;Xavi Simons,NED,ZOM
+PL|West Ham United|Jarrod Bowen,ENG,RF;Niclas Füllkrug,GER,ST;Alphonse Areola,FRA,TW;Tomáš Souček,Tschechien,ZDM;Konstantinos Mavropanos,Griechenland,IV
+PL|Wolverhampton|João Gomes,BRA,ZDM;Jørgen Strand Larsen,Norwegen,ST;José Sá,POR,TW;Hwang Hee-chan,Südkorea,LF
+LL|Alavés|Carlos Vicente,ESP,RF;Antonio Sivera,ESP,TW;Nahuel Tenaglia,ARG,RV
+LL|Athletic Club|Nico Williams,ESP,LF;Iñaki Williams,Ghana,RF;Unai Simón,ESP,TW;Oihan Sancet,ESP,ZOM;Dani Vivian,ESP,IV
+LL|Atlético Madrid|Antoine Griezmann,FRA,ST;Julián Álvarez,ARG,ST;Jan Oblak,Slowenien,TW;Koke,ESP,ZM;José María Giménez,Uruguay,IV;Marcos Llorente,ESP,RM
+LL|Barcelona|Lamine Yamal,ESP,RF;Robert Lewandowski,Polen,ST;Pedri,ESP,ZM;Raphinha,BRA,LF;Gavi,ESP,ZM;Joan García,ESP,TW;Ronald Araújo,Uruguay,IV;Pau Cubarsí,ESP,IV;Frenkie de Jong,NED,ZM;Marcus Rashford,ENG,LF
+LL|Celta Vigo|Iago Aspas,ESP,ST;Borja Iglesias,ESP,ST;Carl Starfelt,Schweden,IV
+LL|Elche|Álvaro Rodríguez,Uruguay,ST;Pedrosa,ESP,LV;Aleix Febas,ESP,ZOM
+LL|Espanyol|Pere Milla,ESP,RF;Javi Puado,ESP,LF;Leandro Cabrera,Uruguay,IV
+LL|Getafe|Borja Mayoral,ESP,ST;Djené,Togo,IV;Luis Milla,ESP,ZM
+LL|Girona|Cristhian Stuani,Uruguay,ST;Vitor Reis,BRA,IV;Viktor Tsyhankov,Ukraine,RF
+LL|Levante|José Luis Morales,ESP,LF;Pablo Martínez,ESP,ZM;Unai Elgezabal,ESP,IV
+LL|Mallorca|Vedat Muriqi,Kosovo,ST;Antonio Raíllo,ESP,IV;Johan Mojica,Kolumbien,LV
+LL|Osasuna|Ante Budimir,Kroatien,ST;Jon Moncayola,ESP,ZM;Sergio Herrera,ESP,TW
+LL|Real Oviedo|Santi Cazorla,ESP,ZM;David Costas,ESP,IV;Alberto Reina,ESP,ZDM
+LL|Rayo Vallecano|Isi Palazón,ESP,RF;Raúl de Tomás,ESP,ST;Augusto Batalla,ARG,TW;Florian Lejeune,FRA,IV
+LL|Real Betis|Isco,ESP,ZOM;Antony,BRA,RF;Abde Ezzalzouli,Marokko,LF;Giovani Lo Celso,ARG,ZOM;Héctor Bellerín,ESP,RV
+LL|Real Madrid|Kylian Mbappé,FRA,ST;Vinícius Júnior,BRA,LF;Jude Bellingham,ENG,ZOM;Thibaut Courtois,BEL,TW;Federico Valverde,Uruguay,ZM;Rodrygo,BRA,RF;Antonio Rüdiger,GER,IV;Trent Alexander-Arnold,ENG,RV;Aurélien Tchouaméni,FRA,ZDM;Eduardo Camavinga,FRA,ZM;Dean Huijsen,ESP,IV;Álvaro Carreras,ESP,LV;Franco Mastantuono,ARG,RF
+LL|Real Sociedad|Mikel Oyarzabal,ESP,ST;Takefusa Kubo,Japan,RF;Álex Remiro,ESP,TW;Ander Barrenetxea,ESP,LF
+LL|Sevilla|Dodi Lukébakio,BEL,RF;Ørjan Nyland,Norwegen,TW;Isaac Romero,ESP,ST;Nemanja Gudelj,Serbien,ZDM
+LL|Valencia|Hugo Duro,ESP,ST;Diego López,ESP,ST;Javi Guerra,ESP,ZM;Stole Dimitrievski,Nordmazedonien,TW
+LL|Villarreal|Gerard Moreno,ESP,ST;Dani Parejo,ESP,ZDM;Alfonso Pedraza,ESP,LV;Georges Mikautadze,Georgien,ST
+SA|Atalanta|Ademola Lookman,Nigeria,LF;Charles De Ketelaere,BEL,ZOM;Marco Carnesecchi,ITA,TW;Giorgio Scalvini,ITA,IV;Éderson,BRA,ZM
+SA|Bologna|Riccardo Orsolini,ITA,RF;Jhon Lucumí,Kolumbien,IV;Łukasz Skorupski,Polen,TW;Jens Odgaard,Dänemark,ZOM;Santiago Castro,ARG,ST
+SA|Cagliari|Gianluca Gaetano,ITA,ZOM;Elia Caprile,ITA,TW;Yerry Mina,Kolumbien,IV
+SA|Como|Nico Paz,ARG,ZOM;Martin Baturina,Kroatien,ZOM;Assane Diao,Senegal,RF;Álvaro Morata,ESP,ST
+SA|Cremonese|Jamie Vardy,ENG,ST;Emil Audero,ITA,TW;Federico Bonazzoli,ITA,ST
+SA|Fiorentina|Moise Kean,ITA,ST;David de Gea,ESP,TW;Albert Guðmundsson,Island,ZOM;Nicolò Fagioli,ITA,ZM
+SA|Genoa|Vítor Oliveira,POR,ST;Morten Frendrup,Dänemark,ZDM;Koni De Winter,BEL,IV
+SA|Hellas Verona|Gift Orban,Nigeria,ST;Suslov,Slowakei,ZM;Lorenzo Montipò,ITA,TW
+SA|Inter|Lautaro Martínez,ARG,ST;Marcus Thuram,FRA,ST;Nicolò Barella,ITA,ZM;Alessandro Bastoni,ITA,IV;Yann Sommer,Schweiz,TW;Hakan Çalhanoğlu,Türkei,ZDM;Federico Dimarco,ITA,LV;Manuel Akanji,Schweiz,IV;Henrikh Mkhitaryan,Armenien,ZM
+SA|Juventus|Kenan Yıldız,Türkei,LF;Dušan Vlahović,Serbien,ST;Manuel Locatelli,ITA,ZDM;Gleison Bremer,BRA,IV;Jonathan David,Kanada,ST;Michele Di Gregorio,ITA,TW;Pierre Kalulu,FRA,IV
+SA|Lazio|Mattia Zaccagni,ITA,LF;Valentín Castellanos,ARG,ST;Ivan Provedel,ITA,TW;Nicolò Rovella,ITA,ZDM
+SA|Lecce|Nikola Krstović,Montenegro,ST;Wladimiro Falcone,ITA,TW;Ylber Ramadani,Kosovo,ZDM
+SA|AC Mailand|Rafael Leão,POR,LF;Christian Pulisic,USA,RF;Mike Maignan,FRA,TW;Luka Modrić,Kroatien,ZM;Fikayo Tomori,ENG,IV;Adrien Rabiot,FRA,ZM;Santiago Giménez,Mexiko,ST
+SA|Napoli|Kevin De Bruyne,BEL,ZOM;Scott McTominay,Schottland,ZM;Romelu Lukaku,BEL,ST;Rasmus Højlund,Dänemark,ST;Giovanni Di Lorenzo,ITA,RV;Alessandro Buongiorno,ITA,IV;Vanja Milinković-Savić,Serbien,TW;André-Frank Zambo Anguissa,Kamerun,ZM
+SA|Parma|Ange-Yoan Bonny,FRA,ST;Zion Suzuki,Japan,TW;Christian Ordóñez,ARG,ZM
+SA|Pisa|Marius Marin,Rumänien,ZM;Arturo Calabresi,ITA,IV;Henrik Meister,Dänemark,ST
+SA|AS Rom|Paulo Dybala,ARG,ZOM;Matías Soulé,ARG,RF;Mile Svilar,Serbien,TW;Manu Koné,FRA,ZM;Lorenzo Pellegrini,ITA,ZOM;Gianluca Mancini,ITA,IV;Evan Ndicka,Elfenbeinküste,IV;Evan Ferguson,Irland,ST
+SA|Sassuolo|Domenico Berardi,ITA,RF;Armand Laurienté,FRA,LF;Tarik Muharemović,Bosnien,IV;Kristian Thorstvedt,Norwegen,ZM
+SA|Torino|Nikola Vlašić,Kroatien,ZOM;Duván Zapata,Kolumbien,ST;Saul Coco,Äquatorialguinea,IV
+SA|Udinese|Lorenzo Lucca,ITA,ST;Thomas Kristensen,Dänemark,IV;Maduka Okoye,Nigeria,TW
+L1|Angers|Himad Abdelli,Algerien,ZM;Jordan Lefort,FRA,IV;Yahia Fofana,Elfenbeinküste,TW
+L1|Auxerre|Gaëtan Perrin,FRA,ST;Donovan Léon,FRA,TW;Lassine Sinayoko,Mali,ST
+L1|Brest|Pierre Lees-Melou,FRA,ZM;Marco Bizot,NED,TW;Ludovic Ajorque,FRA,ST
+L1|Le Havre|Mathieu Gorgelin,FRA,TW;Rassoul Ndiaye,Senegal,ZM;Yassine Kechta,Marokko,ZM
+L1|Lens|Florian Thauvin,FRA,RF;Brice Samba,Kongo,TW;Matthieu Udol,FRA,LV;Wesley Saïd,FRA,ST
+L1|Lille|Hákon Haraldsson,Island,ZOM;Ethan Mbappé,FRA,ZOM;Bafodé Diakité,FRA,IV
+L1|Lorient|Pablo Pagis,FRA,ST;Laurent Abergel,FRA,ZDM;Julien Laporte,FRA,IV
+L1|Lyon|Alexandre Lacazette,FRA,ST;Corentin Tolisso,FRA,ZM;Moussa Niakhaté,FRA,IV;Malick Fofana,BEL,LF
+L1|Marseille|Mason Greenwood,ENG,RF;Pierre-Emerick Aubameyang,Gabun,ST;Geoffrey Kondogbia,Zentralafrika,ZDM;Gerónimo Rulli,ARG,TW;Amine Harit,Marokko,ZOM
+L1|Metz|Jean-Philippe Krasso,Elfenbeinküste,ST;Urie-Michel Mboula,FRA,LF;Alexandre Oukidja,Algerien,TW
+L1|Monaco|Takumi Minamino,Japan,ZOM;Folarin Balogun,USA,ST;Philipp Köhn,Schweiz,TW;Paul Pogba,FRA,ZM;Denis Zakaria,Schweiz,ZDM;Maghnes Akliouche,FRA,ZOM
+L1|Nantes|Matthis Abline,FRA,ST;Anthony Lopes,POR,TW;Mostafa Mohamed,Ägypten,ST
+L1|Nizza|Terem Moffi,Nigeria,ST;Jérémie Boga,Elfenbeinküste,LF;Marcin Bułka,Polen,TW;Evann Guessand,Elfenbeinküste,RF
+L1|Paris FC|Ilan Kebbal,Algerien,ZOM;Obed Nkambadio,FRA,ZM;Willem Geubbels,FRA,LF
+L1|Paris Saint-Germain|Ousmane Dembélé,FRA,RF;Vitinha,POR,ZM;Achraf Hakimi,Marokko,RV;Marquinhos,BRA,IV;Lucas Chevalier,FRA,TW;Désiré Doué,FRA,RF;Khvicha Kvaratskhelia,Georgien,LF;João Neves,POR,ZDM;Bradley Barcola,FRA,LF;Fabián Ruiz,ESP,ZM
+L1|Rennes|Esteban Lepaul,FRA,ST;Mikayil Faye,Senegal,IV;Jordan James,Wales,ZM
+L1|Straßburg|Emanuel Emegha,NED,ST;Mike Penders,BEL,TW;Diego Moreira,BEL,LF
+L1|Toulouse|Frank Magri,Kamerun,ST;Guillaume Restes,FRA,TW;Aron Dønnum,Norwegen,RF
+BL|FC Augsburg|Alexis Claude-Maurice,FRA,ZOM;Finn Dahmen,GER,TW;Fabian Rieder,Schweiz,ZM
+BL|Union Berlin|Danilho Doekhi,NED,IV;Frederik Rønnow,Dänemark,TW;Andrej Ilić,Serbien,ST
+BL|Werder Bremen|Marco Friedl,Österreich,IV;Jens Stage,Dänemark,ZM;Karl Hein,Estland,TW
+BL|Borussia Dortmund|Serhou Guirassy,Guinea,ST;Julian Brandt,GER,ZOM;Gregor Kobel,Schweiz,TW;Nico Schlotterbeck,GER,IV;Jobe Bellingham,ENG,ZM;Karim Adeyemi,GER,LF;Felix Nmecha,GER,ZM;Waldemar Anton,GER,IV
+BL|Eintracht Frankfurt|Hugo Larsson,Schweden,ZDM;Mario Götze,GER,ZOM;Kevin Trapp,GER,TW;Jonathan Burkardt,GER,ST
+BL|SC Freiburg|Vincenzo Grifo,ITA,LF;Matthias Ginter,GER,IV;Noah Atubolu,GER,TW
+BL|Hamburger SV|Fábio Vieira,POR,ZOM;Daniel Heuer Fernandes,GER,TW;Robert Glatzel,GER,ST
+BL|Heidenheim|Kevin Müller,GER,TW;Marvin Pieringer,GER,ST;Patrick Mainka,GER,IV
+BL|Hoffenheim|Andrej Kramarić,Kroatien,ST;Oliver Baumann,GER,TW;Alexander Prass,Österreich,LM
+BL|1. FC Köln|Said El Mala,GER,LF;Marius Bülter,GER,RF;Timo Hübers,GER,IV
+BL|RB Leipzig|Yan Diomande,Elfenbeinküste,LF;Willi Orbán,Ungarn,IV;David Raum,GER,LV;Christoph Baumgartner,Österreich,ZOM;Castello Lukeba,FRA,IV;Assan Ouédraogo,GER,ZM;Péter Gulácsi,Ungarn,TW
+BL|Bayer Leverkusen|Exequiel Palacios,ARG,ZDM;Patrik Schick,Tschechien,ST;Jarell Quansah,ENG,IV;Malik Tillman,USA,ZOM;Mark Flekken,NED,TW;Álex Grimaldo,ESP,LV;Aleix García,ESP,ZDM
+BL|Mainz 05|Nadiem Amiri,GER,ZM;Lee Jae-sung,Südkorea,ZOM;Robin Zentner,GER,TW
+BL|Borussia M'gladbach|Kevin Stöger,Österreich,ZM;Tim Kleindienst,GER,ST;Moritz Nicolas,GER,TW
+BL|Bayern München|Harry Kane,ENG,ST;Jamal Musiala,GER,ZOM;Manuel Neuer,GER,TW;Michael Olise,FRA,RF;Luis Díaz,Kolumbien,LF;Joshua Kimmich,GER,ZDM;Dayot Upamecano,FRA,IV;Alphonso Davies,Kanada,LV;Aleksandar Pavlović,GER,ZDM;Kim Min-jae,Südkorea,IV;Jonathan Tah,GER,IV
+BL|FC St. Pauli|Nikola Vasilj,Bosnien,TW;Johannes Eggestein,GER,ST;Eric Smith,Schweden,ZDM
+BL|VfB Stuttgart|Deniz Undav,GER,ST;Jamie Leweling,GER,LM;Alexander Nübel,GER,TW;Angelo Stiller,GER,ZDM;Maximilian Mittelstädt,GER,LV
+BL|VfL Wolfsburg|Jonas Wind,Dänemark,ST;Kamil Grabara,Polen,TW;Mohamed Amoura,Algerien,LF;Patrick Wimmer,Österreich,RM
+PL|Arsenal|Gabriel Magalhães,BRA,IV;Ben White,ENG,RV;Jurriën Timber,NED,RV;Martín Zubimendi,ESP,ZDM;Kai Havertz,GER,ST;Eberechi Eze,ENG,ZOM
+PL|Aston Villa|Morgan Rogers,ENG,ZOM;Boubacar Kamara,FRA,ZDM;Pau Torres,ESP,IV;Matty Cash,Polen,RV;Lucas Digne,FRA,LV;Amadou Onana,BEL,ZDM
+PL|Bournemouth|Adrien Truffert,FRA,LV;Alex Scott,ENG,ZM;Ryan Christie,Schottland,ZOM;Lewis Cook,ENG,ZDM;Tyler Adams,USA,ZDM;Adam Smith,ENG,RV
+PL|Brentford|Keane Lewis-Potter,ENG,LF;Mathias Jensen,Dänemark,ZM;Christian Nørgaard,Dänemark,ZDM;Vitaly Janelt,GER,ZDM;Sepp van den Berg,NED,IV;Michael Kayode,ITA,RV
+PL|Brighton|Georginio Rutter,FRA,ZOM;Pervis Estupiñán,Ecuador,LV;Lewis Dunk,ENG,IV;Jan Paul van Hecke,NED,IV;Matt O'Riley,Dänemark,ZM;Brajan Gruda,GER,ZOM
+PL|Burnley|Jaidon Anthony,ENG,LF;Josh Brownhill,ENG,ZM;Hannibal Mejbri,Tunesien,ZOM;Lyle Foster,Südafrika,ST;Maxime Estève,FRA,IV;Bashir Humphreys,ENG,IV
+PL|Chelsea|Levi Colwill,ENG,IV;Wesley Fofana,FRA,IV;Malo Gusto,FRA,RV;Pedro Neto,POR,RF;Jamie Gittens,ENG,LF;Liam Delap,ENG,ST
+PL|Crystal Palace|Adam Wharton,ENG,ZM;Daichi Kamada,Japan,ZM;Ismaïla Sarr,Senegal,RF;Tyrick Mitchell,ENG,LV;Maxence Lacroix,FRA,IV;Chris Richards,USA,IV
+PL|Everton|James Tarkowski,ENG,IV;Jake O'Brien,Irland,IV;Séamus Coleman,Irland,RV;Vitaliy Mykolenko,Ukraine,LV;Tim Iroegbunam,ENG,ZDM;Carlos Alcaraz,ARG,ZM
+PL|Fulham|Antonee Robinson,USA,LV;Kenny Tete,NED,RV;Calvin Bassey,Nigeria,LV;Sander Berge,Norwegen,ZDM;Emile Smith Rowe,ENG,ZOM;Harry Wilson,Wales,RF
+PL|Leeds United|Joel Piroe,Wales,ST;Noah Okafor,Schweiz,LF;Daniel James,Wales,RF;Sean Longstaff,ENG,ZM;Jayden Bogle,ENG,RV;Gabriel Gudmundsson,Schweden,LV
+PL|Liverpool|Conor Bradley,Nordirland,RV;Ibrahima Konaté,FRA,IV;Milos Kerkez,Ungarn,LV;Jeremie Frimpong,NED,RV;Cody Gakpo,NED,LF;Hugo Ekitiké,FRA,ST
+PL|Manchester City|Bernardo Silva,POR,ZM;Savinho,BRA,RF;Jérémy Doku,BEL,LF;Nico O'Reilly,ENG,LV;Matheus Nunes,POR,ZM;John Stones,ENG,IV
+PL|Manchester United|Harry Maguire,ENG,IV;Diogo Dalot,POR,RV;Luke Shaw,ENG,LV;Casemiro,BRA,ZDM;Manuel Ugarte,Uruguay,ZDM;Leny Yoro,FRA,IV
+PL|Newcastle United|Harvey Barnes,ENG,LF;Joelinton,BRA,ZM;Fabian Schär,Schweiz,IV;Kieran Trippier,ENG,RV;Dan Burn,ENG,IV;Lewis Hall,ENG,LV
+PL|Nottingham Forest|Elliot Anderson,ENG,ZM;Callum Hudson-Odoi,ENG,LF;Ola Aina,Nigeria,RV;Nikola Milenković,Serbien,IV;Ibrahim Sangaré,Elfenbeinküste,ZDM;Taiwo Awoniyi,Nigeria,ST
+PL|Sunderland|Enzo Le Fée,FRA,ZM;Habib Diarra,Senegal,ZM;Dan Neil,ENG,ZM;Nordi Mukiele,FRA,RV;Dennis Cirkin,ENG,LV;Chris Rigg,ENG,ZM
+PL|Tottenham Hotspur|Pedro Porro,ESP,RV;Destiny Udogie,ITA,LV;João Palhinha,POR,ZDM;Rodrigo Bentancur,Uruguay,ZM;Pape Matar Sarr,Senegal,ZM;Dominic Solanke,ENG,ST
+PL|West Ham United|Lucas Paquetá,BRA,ZOM;Crysencio Summerville,NED,LF;Mateus Fernandes,POR,ZM;Edson Álvarez,Mexiko,ZDM;Aaron Wan-Bissaka,ENG,RV;Max Kilman,ENG,IV
+PL|Wolverhampton|Matt Doherty,Irland,RV;Toti Gomes,POR,IV;Emmanuel Agbadou,Elfenbeinküste,IV;Rodrigo Gomes,POR,RF;Tolu Arokodare,Nigeria,ST;Ladislav Krejčí,Tschechien,IV
+LL|Alavés|Antonio Blanco,ESP,ZDM;Abdel Abqar,Marokko,IV;Jonny Otto,ESP,RV;Aleix Garrido,ESP,ZM;Toni Martínez,ESP,ST;Facundo Garcés,ARG,IV
+LL|Athletic Club|Yuri Berchiche,ESP,LV;Aymeric Laporte,ESP,IV;Mikel Jauregizar,ESP,ZDM;Álex Berenguer,ESP,LF;Gorka Guruzeta,ESP,ST;Robert Navarro,ESP,RF
+LL|Atlético Madrid|Alexander Sørloth,Norwegen,ST;Conor Gallagher,ENG,ZM;Pablo Barrios,ESP,ZM;Nahuel Molina,ARG,RV;Robin Le Normand,ESP,IV;Johnny Cardoso,USA,ZDM
+LL|Barcelona|Alejandro Balde,ESP,LV;Jules Koundé,FRA,RV;Íñigo Martínez,ESP,IV;Fermín López,ESP,ZOM;Dani Olmo,ESP,ZOM;Ferran Torres,ESP,ST
+LL|Celta Vigo|Marcos Alonso,ESP,LV;Hugo Álvarez,ESP,LF;Williot Swedberg,Schweden,RF;Ilaix Moriba,Guinea,ZM;Sergio Carreira,ESP,RV;Iván Villar,ESP,TW
+LL|Elche|Matías Dituro,ARG,TW;Gonzalo Villar,ESP,ZM;Héctor Fort,ESP,RV;Federico Redondo,ARG,ZDM;Tete Morente,ESP,LF
+LL|Espanyol|Fernando Calero,ESP,IV;Carlos Romero,ESP,LV;Urko González,ESP,ZM;Marko Dmitrović,Serbien,TW;Edu Expósito,ESP,ZM;Ramón Terrats,ESP,ZM
+LL|Getafe|David Soria,ESP,TW;Domingos Duarte,POR,IV;Mauro Arambarri,Uruguay,ZM;Carles Pérez,ESP,RF;Bertuğ Yıldırım,Türkei,ST;Juan Iglesias,ESP,RV
+LL|Girona|Paulo Gazzaniga,ARG,TW;Arnau Martínez,ESP,RV;Miguel Gutiérrez,ESP,LV;Iván Martín,ESP,ZM;Yangel Herrera,Venezuela,ZM;Bryan Gil,ESP,LF
+LL|Levante|Matías Moreno,ARG,IV;Carlos Álvarez,ESP,RF;Iván Romero,ESP,ST;Jon Ander Olasagasti,ESP,ZM;Nacho Pérez,ESP,ZM
+LL|Mallorca|Dominik Greif,Slowakei,TW;Pablo Maffeo,ESP,RV;Samú Costa,POR,ZDM;Manu Morlanes,ESP,ZM;Sergi Darder,ESP,ZM;Jan Virgili,ESP,RF
+LL|Osasuna|Aimar Oroz,ESP,ZM;Lucas Torró,ESP,ZDM;Alejandro Catena,ESP,IV;Rubén García,ESP,RF;Raúl García,ESP,ST;Jesús Areso,ESP,RV
+LL|Real Oviedo|Dani Calvo,ESP,IV;Leander Dendoncker,BEL,ZDM;Santiago Colombatto,ARG,ZM
+LL|Rayo Vallecano|Pathé Ciss,Senegal,ZDM;Óscar Valentín,ESP,ZDM;Unai López,ESP,ZM;Jorge de Frutos,ESP,RF;Pedro Díaz,ESP,RF;Andrei Rațiu,Rumänien,RV
+LL|Real Betis|Marc Roca,ESP,ZDM;Pablo Fornals,ESP,ZOM;Cucho Hernández,Kolumbien,ST;Natan,BRA,IV;Álvaro Valles,ESP,TW;Diego Llorente,ESP,IV
+LL|Real Madrid|Fran García,ESP,LV;Ferland Mendy,FRA,LV;Éder Militão,BRA,IV;David Alaba,Österreich,IV;Dani Carvajal,ESP,RV;Arda Güler,Türkei,ZOM
+LL|Real Sociedad|Brais Méndez,ESP,ZOM;Igor Zubeldia,ESP,IV;Aritz Elustondo,ESP,IV;Sergio Gómez,ESP,LV;Luka Sučić,Kroatien,ZM;Orri Óskarsson,Island,ST
+LL|Sevilla|Djibril Sow,Schweiz,ZDM;Gabriel Suazo,Chile,LV;Loïc Badé,FRA,IV;Adrià Pedrosa,ESP,LV;Kike Salas,ESP,IV;Alexis Sánchez,Chile,ST;Joan Jordán,ESP,ZM
+LL|Valencia|José Gayà,ESP,LV;Cristhian Mosquera,ESP,IV;Pepelu,ESP,ZM;André Almeida,POR,ZM;Luis Rioja,ESP,RF;Dimitri Foulquier,FRA,RV;Hugo Guillamón,ESP,ZDM
+LL|Villarreal|Santi Comesaña,ESP,ZM;Juan Foyth,ARG,RV;Rafa Marín,ESP,IV;Alberto Moleiro,ESP,ZOM;Ayoze Pérez,ESP,ST;Tajon Buchanan,Kanada,RF;Sergi Cardona,ESP,LV
+SA|Atalanta|Marten de Roon,NED,ZDM;Mario Pašalić,Kroatien,ZM;Berat Djimsiti,Albanien,IV;Sead Kolašinac,Bosnien,IV;Raoul Bellanova,ITA,RV;Gianluca Scamacca,ITA,ST;Lazar Samardžić,Serbien,ZOM
+SA|Bologna|Lewis Ferguson,Schottland,ZM;Remo Freuler,Schweiz,ZDM;Juan Miranda,ESP,LV;Thijs Dallinga,NED,ST;Jonathan Rowe,ENG,LF;Nicolò Cambiaghi,ITA,LF
+SA|Cagliari|Marco Palestra,ITA,RV;Michel Adopo,FRA,ZM;Sebastiano Esposito,ITA,ST;Alessandro Deiola,ITA,ZM;Gabriele Zappa,ITA,RV
+SA|Como|Lucas da Cunha,FRA,ZM;Maximo Perrone,ARG,ZM;Jesús Rodríguez,ESP,RF;Alberto Moreno,ESP,LV;Marc-Oliver Kempf,GER,IV;Jean Butez,FRA,TW
+SA|Cremonese|Jari Vandeputte,BEL,RF;Alberto Grassi,ITA,ZM;Federico Baschirotto,ITA,IV;Michele Collocolo,ITA,ZM;Giuseppe Pezzella,ITA,LV;Franco Vázquez,ARG,ZOM
+SA|Fiorentina|Robin Gosens,GER,LV;Dodô,BRA,RV;Pietro Comuzzo,ITA,IV;Rolando Mandragora,ITA,ZM;Cher Ndour,ITA,ZM;Marin Pongračić,Kroatien,IV;Manor Solomon,Israel,LF
+SA|Genoa|Caleb Ekuban,Ghana,ST;Honest Ahanor,ITA,IV;Mattia Bani,ITA,IV;Junior Messias,BRA,RF;Alex Valle,ESP,LV
+SA|Hellas Verona|Kieron Bowie,Schottland,ST;Giovane,BRA,RF;Martin Frese,Dänemark,IV;Ondrej Duda,Slowakei,ZM;Domagoj Bradarić,Kroatien,LV
+SA|Inter|Piotr Zieliński,Polen,ZM;Francesco Acerbi,ITA,IV;Benjamin Pavard,FRA,IV;Denzel Dumfries,NED,RV;Carlos Augusto,BRA,LV;Davide Frattesi,ITA,ZM;Petar Sučić,Kroatien,ZM
+SA|Juventus|Teun Koopmeiners,NED,ZM;Andrea Cambiaso,ITA,LV;Khéphren Thuram,FRA,ZDM;Weston McKennie,USA,ZM;Federico Gatti,ITA,IV;Lloyd Kelly,ENG,IV;Francisco Conceição,POR,RF
+SA|Lazio|Mario Gila,ESP,IV;Nuno Tavares,POR,LV;Matías Vecino,Uruguay,ZM;Gustav Isaksen,Dänemark,RF;Toma Basić,Kroatien,ZM;Mattéo Guendouzi,FRA,ZM;Adam Marušić,Montenegro,RV
+SA|Lecce|Santiago Pierotti,ARG,RF;Lorenzo Venuti,ITA,RV;Tiago Gabriel,POR,IV;Mohamed Kaba,Guinea,ZM;Danilo Veiga,POR,RV
+SA|AC Mailand|Alexis Saelemaekers,BEL,RM;Strahinja Pavlović,Serbien,IV;Davide Bartesaghi,ITA,LV;Youssouf Fofana,FRA,ZM;Christopher Nkunku,FRA,ST;Ruben Loftus-Cheek,ENG,ZM;Matteo Gabbia,ITA,IV
+SA|Napoli|Alex Meret,ITA,TW;Amir Rrahmani,Kosovo,IV;Giovanni Simeone,ARG,ST;Matteo Politano,ITA,RF;Stanislav Lobotka,Slowakei,ZDM;Leonardo Spinazzola,ITA,LV;Noa Lang,NED,LF
+SA|Parma|Enrico Delprato,ITA,RV;Matteo Cancellieri,ITA,RF;Mandela Keita,BEL,ZM;Lautaro Valenti,ARG,IV;Mariano Troilo,ARG,IV;Adrián Bernabé,ESP,ZM
+SA|Pisa|Stefano Moreo,ITA,ST;Antonio Caracciolo,ITA,IV;Idrissa Touré,GER,ZM;Mateus Lusuardi,BRA,IV
+SA|AS Rom|Wesley França,BRA,RV;Angeliño,ESP,LV;Bryan Cristante,ITA,ZM;Leandro Paredes,ARG,ZDM;Zeki Çelik,Türkei,RV;Artem Dovbyk,Ukraine,ST;Neil El Aynaoui,Marokko,ZM
+SA|Sassuolo|Andrea Pinamonti,ITA,ST;Nemanja Matić,Serbien,ZDM;Ruan Tressoldi,BRA,IV;Edoardo Iannoni,ITA,ZM;Cristian Volpato,ITA,ZOM
+SA|Torino|Che Adams,Schottland,ST;Valentino Lazaro,Österreich,RV;Adrien Tameze,FRA,ZM;Ivan Ilić,Serbien,ZM;Perr Schuurs,NED,IV
+SA|Udinese|Jesper Karlström,Schweden,ZM;Nicolò Zaniolo,ITA,ZOM;Keinan Davis,ENG,ST;Kingsley Ehizibue,Nigeria,RV;Oumar Solet,FRA,IV;Hassane Kamara,Elfenbeinküste,LV
+L1|Angers|Sofiane Boufal,Marokko,LF;Pierrick Capelle,FRA,ZM;Jean-Eudes Aholou,Elfenbeinküste,ZM;Yan Valery,FRA,RV
+L1|Auxerre|Gideon Mensah,Ghana,LV;Théo Pellenard,FRA,LV;Elisha Owusu,FRA,ZDM
+L1|Brest|Kenny Lala,FRA,RV;Brendan Chardonnet,FRA,IV;Hugo Magnetti,FRA,ZDM;Romain Del Castillo,FRA,RF;Kamory Doumbia,Mali,ST;Mahdi Camara,FRA,ZDM
+L1|Le Havre|Daler Kuzyaev,Russland,ZM;Issa Soumaré,FRA,RV;Antoine Joujou,FRA,ZOM;Christopher Operi,Elfenbeinküste,LV;Josué Casimir,FRA,LF
+L1|Lens|Kevin Danso,Österreich,IV;Facundo Medina,ARG,IV;Adrien Thomasson,FRA,ZM;Angelo Fulgini,FRA,ZOM;Jhoanner Chávez,Ecuador,IV
+L1|Lille|Angel Gomes,ENG,ZM;Nabil Bentaleb,Algerien,ZDM;Rémy Cabella,FRA,ZOM;Benjamin André,FRA,ZDM;Thomas Meunier,BEL,RV;Nathan Ngoy,BEL,IV
+L1|Lorient|Bamo Meïté,FRA,IV;Théo Le Bris,FRA,ZM;Darlin Yongwa,Kamerun,RV;Aiyegun Tosin,Nigeria,ST;Yvon Mvogo,Schweiz,TW
+L1|Lyon|Ainsley Maitland-Niles,ENG,ZM;Tanner Tessmann,USA,ZDM;Orel Mangala,BEL,ZM;Said Benrahma,Algerien,LF;Pavel Šulc,Tschechien,ZOM;Ernest Nuamah,Ghana,RF
+L1|Marseille|Pierre-Emile Højbjerg,Dänemark,ZDM;Leonardo Balerdi,ARG,IV;Amine Gouiri,FRA,ST;Quentin Merlin,FRA,LV;Timothy Weah,USA,RF;Nayef Aguerd,Marokko,IV;Igor Paixão,BRA,LF
+L1|Metz|Gauthier Hein,FRA,ZOM;Joel Asoro,Schweden,ST;Koffi Kouao,Elfenbeinküste,ZM
+L1|Monaco|Eliesse Ben Seghir,Marokko,RF;Mika Biereth,Dänemark,ST;Thilo Kehrer,GER,IV;Vanderson,BRA,RV;Aleksandr Golovin,Russland,ZM;Mohamed Camara,Mali,ZDM;Lamine Camara,Senegal,ZM
+L1|Nantes|Alban Lafont,FRA,TW;Fabien Centonze,FRA,RV;Johann Lepenant,FRA,ZM;Douglas Augusto,BRA,ZM;Francis Coquelin,FRA,ZDM
+L1|Nizza|Mohamed-Ali Cho,FRA,ST;Sofiane Diop,FRA,ZOM;Dante,BRA,IV;Jonathan Clauss,FRA,RV;Morgan Sanson,FRA,ZM;Tanguy Ndombele,FRA,ZM
+L1|Paris FC|Jonathan Ikoné,FRA,RF;Maxime Lopez,FRA,ZM;Thomas Delaine,FRA,LV
+L1|Paris Saint-Germain|Nuno Mendes,POR,LV;Willian Pacho,Ecuador,IV;Lee Kang-in,Südkorea,ZOM;Gonçalo Ramos,POR,ST;Warren Zaïre-Emery,FRA,ZM;Matvey Safonov,Russland,TW;Ibrahim Mbaye,FRA,RF
+L1|Rennes|Jérémy Jacquet,FRA,IV;Ludovic Blas,FRA,ZOM;Anthony Rouault,FRA,IV;Alidu Seidu,Ghana,RV
+L1|Straßburg|Valentín Barco,ARG,LV;Sebastian Nanasi,Schweden,LF;Joaquín Panichelli,ARG,ST;Ismaël Doukouré,FRA,IV;Dilane Bakwa,FRA,RF
+L1|Toulouse|Rasmus Nicolaisen,Dänemark,IV;Vincent Sierro,Schweiz,ZM;Zakaria Aboukhlal,Marokko,LF;Mark McKenzie,USA,IV;Cristian Casseres,Venezuela,ZM
+BL|FC Augsburg|Cédric Zesiger,Schweiz,IV;Phillip Tietz,GER,ST;Elvis Rexhbeçaj,Kosovo,ZM;Mërgim Berisha,Kosovo,ST;Jeffrey Gouweleeuw,NED,IV;Kristijan Jakić,Kroatien,ZDM
+BL|Union Berlin|Christopher Trimmel,Österreich,RV;Rani Khedira,GER,ZDM;Josip Juranović,Kroatien,RV;Janik Haberer,GER,ZM;Jérôme Roussillon,FRA,LV;Andras Schäfer,Ungarn,ZM
+BL|Werder Bremen|Romano Schmid,Österreich,ZOM;Mitchell Weiser,GER,RV;Marvin Ducksch,GER,ST;Senne Lynen,BEL,ZDM;Leonardo Bittencourt,GER,ZM;Derrick Köhn,GER,LV
+BL|Borussia Dortmund|Niklas Süle,GER,IV;Emre Can,GER,ZDM;Marcel Sabitzer,Österreich,ZM;Maximilian Beier,GER,ST;Pascal Groß,GER,ZM;Ramy Bensebaini,Algerien,LV;Julian Ryerson,Norwegen,RV
+BL|Eintracht Frankfurt|Robin Koch,GER,IV;Ellyes Skhiri,Tunesien,ZDM;Can Uzun,Türkei,ZOM;Ansgar Knauff,GER,RF;Nathaniel Brown,GER,LV;Nnamdi Collins,GER,IV;Rasmus Kristensen,Dänemark,RV
+BL|SC Freiburg|Christian Günter,GER,LV;Lucas Höler,GER,ST;Maximilian Eggestein,GER,ZM;Nicolas Höfler,GER,ZDM;Ritsu Dōan,Japan,RF;Junior Adamu,Österreich,ST;Yuito Suzuki,Japan,ZOM
+BL|Hamburger SV|Jonas Meffert,GER,ZDM;Miro Muheim,Schweiz,LV;Luka Vušković,Kroatien,IV;Nicolai Remberg,GER,ZM;Ransford Königsdörffer,GER,ST
+BL|Heidenheim|Jan-Niklas Beste,GER,ZM;Eren Dinkçi,Türkei,RF;Adrian Beck,GER,ZOM;Paul Wanner,GER,ZOM;Marnon Busch,GER,RV;Sirlord Conteh,GER,LF
+BL|Hoffenheim|Grischa Prömel,GER,ZM;Wouter Burger,NED,ZDM;Ozan Kabak,Türkei,IV;Tim Lemperle,GER,ST;Fisnik Asllani,Kosovo,ST;Robert Skov,Dänemark,RM
+BL|1. FC Köln|Jan Thielmann,GER,RF;Eric Martel,GER,ZDM;Rav van den Berg,NED,IV;Luca Waldschmidt,GER,ST;Joel Schmied,Schweiz,IV;Ragnar Ache,GER,ST;Linton Maina,GER,RF
+BL|RB Leipzig|Antonio Nusa,Norwegen,LF;Xaver Schlager,Österreich,ZM;Nicolas Seiwald,Österreich,ZDM;Amadou Haidara,Mali,ZM;Ridle Baku,GER,RV;Maarten Vandevoordt,BEL,TW;Yussuf Poulsen,Dänemark,ST
+BL|Bayer Leverkusen|Piero Hincapié,Ecuador,IV;Nathan Tella,Nigeria,RF;Ibrahim Maza,Algerien,ZOM;Lucas Vázquez,ESP,RV;Jonas Hofmann,GER,RM;Robert Andrich,GER,ZDM;Equi Fernández,ARG,ZM
+BL|Mainz 05|Silvan Widmer,Schweiz,RV;Kaishu Sano,Japan,ZDM;Armindo Sieb,GER,RF;Phillipp Mwene,Österreich,RV;Danny da Costa,GER,RV;Nelson Weiper,GER,ST;Stefan Bell,GER,IV
+BL|Borussia M'gladbach|Rocco Reitz,GER,ZM;Franck Honorat,FRA,RF;Joe Scally,USA,RV;Nico Elvedi,Schweiz,IV;Haris Tabaković,Bosnien,ST;Philipp Sander,GER,ZDM;Luca Netz,GER,LV
+BL|Bayern München|Konrad Laimer,Österreich,RM;Raphaël Guerreiro,POR,LV;Serge Gnabry,GER,RF;Leon Goretzka,GER,ZM;Sacha Boey,FRA,RV;Josip Stanišić,Kroatien,RV;Tom Bischof,GER,ZM
+BL|FC St. Pauli|Hauke Wahl,GER,IV;James Sands,USA,ZDM;Jackson Irvine,Australien,ZM;Manolis Saliakas,Griechenland,RV;Elias Saad,Tunesien,RF;Connor Metcalfe,Australien,ZM
+BL|VfB Stuttgart|Chris Führich,GER,LF;Ermedin Demirović,Bosnien,ST;Atakan Karazor,GER,ZDM;Jeff Chabot,GER,IV;Josha Vagnoman,GER,RV;Enzo Millot,FRA,ZOM
+BL|VfL Wolfsburg|Maximilian Arnold,GER,ZM;Christian Eriksen,Dänemark,ZOM;Yannick Gerhardt,GER,ZM;Konstantinos Koulierakis,Griechenland,IV;Joakim Mæhle,Dänemark,LV;Denis Vavro,Slowakei,IV;Vaclav Cerny,Tschechien,RF`;
+const NC={ENG:'England',ESP:'Spanien',FRA:'Frankreich',GER:'Deutschland',ITA:'Italien',BRA:'Brasilien',ARG:'Argentinien',POR:'Portugal',NED:'Niederlande',BEL:'Belgien'},PN={TW:'Torwart',IV:'Innenverteidiger',LV:'Linker Verteidiger',RV:'Rechter Verteidiger',ZDM:'Defensives Mittelfeld',ZM:'Zentrales Mittelfeld',ZOM:'Offensives Mittelfeld',LM:'Linkes Mittelfeld',RM:'Rechtes Mittelfeld',LF:'Linker Flügel',RF:'Rechter Flügel',ST:'Stürmer'},GR={TW:'Torwart',IV:'Abwehr',LV:'Abwehr',RV:'Abwehr',ZDM:'Mittelfeld',ZM:'Mittelfeld',ZOM:'Mittelfeld',LM:'Mittelfeld',RM:'Mittelfeld',LF:'Angriff',RF:'Angriff',ST:'Angriff'},LG={PL:'Premier League',LL:'LaLiga',SA:'Serie A',L1:'Ligue 1',BL:'Bundesliga'};
+const PA=[];RAW.split('\n').forEach(l=>{const[a,b,c]=l.split('|');c.split(';').forEach(x=>{const[n,na,p]=x.split(',');PA.push({id:PA.length,name:n,club:b,league:LG[a],nation:NC[na]||na,pos:p})})});
+const ICONS=`Pelé|Brasilien|ST|1960er|Santos
+Diego Maradona|Argentinien|ZOM|1980er|Napoli
+Johan Cruyff|Niederlande|ST|1970er|Ajax
+Franz Beckenbauer|Deutschland|IV|1970er|Bayern München
+Michel Platini|Frankreich|ZOM|1980er|Juventus
+Zinédine Zidane|Frankreich|ZOM|2000er|Real Madrid
+Ronaldinho|Brasilien|ZOM|2000er|Barcelona
+R9 Ronaldo|Brasilien|ST|1990er|Inter
+CR7 Ronaldo|Portugal|ST|2010er|Real Madrid
+Lionel Messi|Argentinien|RF|2010er|Barcelona
+Zico|Brasilien|ZOM|1980er|Flamengo
+Romário|Brasilien|ST|1990er|Barcelona
+Roberto Carlos|Brasilien|LV|2000er|Real Madrid
+Cafu|Brasilien|RV|2000er|AC Mailand
+Kaká|Brasilien|ZOM|2000er|AC Mailand
+Rivaldo|Brasilien|LF|1990er|Barcelona
+Thierry Henry|Frankreich|LF|2000er|Arsenal
+Dennis Bergkamp|Niederlande|ZOM|1990er|Arsenal
+Marco van Basten|Niederlande|ST|1980er|AC Mailand
+Ruud Gullit|Niederlande|ZOM|1980er|AC Mailand
+Paolo Maldini|Italien|LV|1990er|AC Mailand
+Franco Baresi|Italien|IV|1980er|AC Mailand
+Fabio Cannavaro|Italien|IV|2000er|Juventus
+Gianluigi Buffon|Italien|TW|2000er|Juventus
+Lew Jaschin|Russland|TW|1960er|Dynamo Moskau
+Dino Zoff|Italien|TW|1970er|Juventus
+Oliver Kahn|Deutschland|TW|2000er|Bayern München
+Iker Casillas|Spanien|TW|2000er|Real Madrid
+Xavi|Spanien|ZM|2000er|Barcelona
+Andrés Iniesta|Spanien|ZM|2010er|Barcelona
+Sergio Ramos|Spanien|IV|2010er|Real Madrid
+Ryan Giggs|Wales|LM|1990er|Manchester United
+David Beckham|England|RM|1990er|Manchester United
+Steven Gerrard|England|ZM|2000er|Liverpool
+Frank Lampard|England|ZM|2000er|Chelsea
+Wayne Rooney|England|ST|2000er|Manchester United
+Zlatan Ibrahimović|Schweden|ST|2010er|Paris Saint-Germain
+Didier Drogba|Elfenbeinküste|ST|2000er|Chelsea
+Samuel Eto'o|Kamerun|ST|2000er|Barcelona
+George Weah|Liberia|ST|1990er|AC Mailand
+Eric Cantona|Frankreich|ST|1990er|Manchester United
+Gabriel Batistuta|Argentinien|ST|1990er|Fiorentina
+Roberto Baggio|Italien|ZOM|1990er|Juventus
+Francesco Totti|Italien|ZOM|2000er|AS Rom
+Alessandro Del Piero|Italien|ST|1990er|Juventus
+Raúl|Spanien|ST|2000er|Real Madrid
+Ferenc Puskás|Ungarn|ST|1950er|Real Madrid
+Alfredo Di Stéfano|Argentinien|ST|1950er|Real Madrid
+Eusébio|Portugal|ST|1960er|Benfica
+George Best|Nordirland|RF|1960er|Manchester United`,ERAS=['1950er','1960er','1970er','1980er','1990er','2000er','2010er'];
+const PI=ICONS.split('\n').map((l,i)=>{const[n,na,po,er,cl]=l.split('|');return{id:i,name:n,nation:na,pos:po,league:er,club:cl,icon:true}});
+const POSL=Object.keys(PN);let P=PA,LGS,NATS,LB,selReady=false;
+function setPool(m){const ic=m==='icons',np=ic?PI:PA;if(P===np&&LB)return;P=np;sel=null;LGS=ic?ERAS:Object.values(LG);NATS=[...new Set(P.map(p=>p.nation))].sort((a,b)=>a.localeCompare(b,'de'));LB=['Position','Land',ic?'Ära':'Liga','Verein'];if(selReady)buildSel()}
+const $=id=>document.getElementById(id),esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let applyTheme,LOC=false,L={},db=null,ref=null,unsub=null,D=null,S={},code='',mode='classic',posF='Alle',sel=null,acted='',mem={};
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return mem[k]||null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){mem[k]=v}}};
+let AC=null,mute=!!store.get('fg_mute');
+function tone(f,d,t='sine',v=.15,at=0,sl){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),t0=AC.currentTime+at;o.type=t;o.frequency.setValueAtTime(f,t0);if(sl)o.frequency.exponentialRampToValueAtTime(sl,t0+d);g.gain.setValueAtTime(v,t0);g.gain.exponentialRampToValueAtTime(.001,t0+d);o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d)}catch(e){}}
+const SFX={click:()=>tone(520,.07,'triangle',.12),ok:()=>{tone(660,.12);tone(880,.2,'sine',.15,.1)},part:()=>{tone(520,.12,'triangle');tone(560,.16,'triangle',.12,.1)},no:()=>tone(240,.3,'sawtooth',.08,0,110),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.28,'triangle',.15,i*.12)),lose:()=>[392,330,262].forEach((f,i)=>tone(f,.3,'sine',.14,i*.18)),whistle:()=>{tone(2400,.35,'sine',.07,0,2000);tone(2400,.3,'sine',.07,.4,2100)},turn:()=>{tone(740,.1,'square',.05);tone(990,.14,'square',.05,.11)}};
+function sfx(n){if(!mute&&SFX[n])SFX[n]()}
+function confetti(){for(let i=0;i<46;i++){const e=document.createElement('i');e.className='cf';e.style.cssText=`left:${Math.random()*100}vw;background:hsl(${Math.random()*360} 80% 55%);animation-delay:${Math.random()*.4}s;--x:${Math.random()*160-80}px`;document.body.appendChild(e);setTimeout(()=>e.remove(),2800)}}
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;sfx('click');const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height),x=document.createElement('span');x.className='rip';x.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(x);setTimeout(()=>x.remove(),600)});
+let lim=120,animGrid=false,curV="",lastTk="",lastHL=-1,lastSc="";let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)}
+const name=()=>($('name').value.trim()||'Spieler').slice(0,18);const hue=s=>[...s].reduce((a,c)=>a+c.charCodeAt(0)*7,0)%360;
+const ini=n=>n.split(' ').map(x=>x[0]).slice(0,2).join('');
+function views(id){if(id==='pick'&&curV!=='pick')animGrid=true;curV=id;$('bHome').classList.toggle('hidden',id==='home');['home','hand','lobby','pick','game','res'].forEach(v=>$('v-'+v).classList.toggle('hidden',v!==id))}
+function save(){store.set('fg_'+code,S)}
+let wq=Promise.resolve(),canWrite=null;
+function werr(e){const c=e&&e.code,m=c==='invalid_argument'?'Kein Schreibzugriff: Der Besitzer muss dich in der Teilen-Funktion als „Mitwirkender“ freigeben.':c==='revoked'?'Dein Zugriff wurde entzogen.':c==='quota_exceeded'?'Speicherlimit erreicht.':c==='resource_exhausted'?'Zu viele Anfragen. Bitte kurz warten.':'Verbindungsproblem'+(e&&e.message?': '+e.message:'');toast(m);const n=$('netmsg');if(n)n.textContent=m;console.error(e)}
+function up(o){if(LOC){Object.assign(D,o);onDoc();return Promise.resolve()}const r=ref;wq=wq.then(async()=>{try{await r.update(o)}catch(e){if(e&&e.code==='unavailable'){await new Promise(x=>setTimeout(x,400+Math.random()*600));try{await r.update(o);return}catch(e2){e=e2}}werr(e)}});return wq}
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on',x===b))});
+document.querySelectorAll('[data-leave]').forEach(b=>b.onclick=leave);
+function leave(){LOC=false;if(unsub)unsub();unsub=null;D=null;if(code)store.set('fg_last',null);code='';views('home')}
+async function createRoom(){try{await createRoom0()}catch(e){werr(e)}}
+async function createRoom0(){if(canWrite===false)return toast('Du hast nur Leserechte und kannst keinen Raum erstellen.');if(!db)return toast('Online ist gerade nicht verfügbar.');let c,tries=0;const L='ABCDEFGHJKLMNPQRSTUVWXYZ';do{c=Array.from({length:4},()=>L[Math.floor(Math.random()*L.length)]).join('');tries++}while((await db.doc('rooms/'+c).get()).exists&&tries<8);
+await db.doc('rooms/'+c).set({code:c,mode,round:1,phase:'lobby',n0:name(),n1:'',j:false,r0:false,r1:false,scores:[0,0],turn:0,pending:null,guess:null,history:[],ts:0,res:null,rv0:null,rv1:null,k0:null,k1:null,t0:Date.now()});S={role:0,round:1,pick:null};code=c;save();attach()}
+async function joinRoom(){try{await joinRoom0()}catch(e){werr(e)}}
+async function joinRoom0(){if(canWrite===false)return toast('Du hast nur Leserechte. Der Besitzer muss dich als „Mitwirkender“ freigeben.');if(!db)return toast('Online ist gerade nicht verfügbar.');const c=$('code').value.trim().toUpperCase();if(c.length<4)return toast('Bitte gib den 4-stelligen Code ein.');const s=await db.doc('rooms/'+c).get();if(!s.exists)return toast('Raum nicht gefunden. Prüfe den Code.');code=c;const old=store.get('fg_'+c);if(old){S=old}else{if(s.data().j){code='';return toast('Dieser Raum ist bereits voll.')}S={role:1,round:s.data().round,pick:null};await db.doc('rooms/'+c).update({j:true,n1:name(),phase:'pick'});save()}attach()}
+function attach(){LOC=false;if(unsub)unsub();ref=db.doc('rooms/'+code);store.set('fg_last',code);unsub=ref.onSnapshot(s=>{if(!s.exists){toast('Raum wurde beendet');return leave()}D=s.data();onDoc()},e=>toast('Verbindung: '+(e.message||'Fehler')))}
+const me=()=>S.role,op=()=>1-S.role,nm=i=>D['n'+i]||'Spieler '+(i+1);
+function onDoc(){setPool(D.mode);if(!LOC){S.round=D.round;logic()}if(D.phase!==lastPh){lastPh=D.phase;if(D.phase==='play')sfx('whistle')}if(!LOC&&D.phase==='play'&&D.turn===me()&&D.ts!==lastTs){lastTs=D.ts;if(D.history.length)sfx('turn')}render()}
+function logic(){if(D.phase==='pick'&&D.r0&&D.r1&&me()===0&&acted!=='s'+D.round){acted='s'+D.round;up({phase:'play',turn:(D.round-1)%2,ts:Date.now()})}}
+let lastTs=0,lastPh='',lastRes='';
+function render(){if(LOC&&L.hand){views('hand');$('hT').textContent=L.hand.t;$('hP').textContent=L.hand.p;$('hB').textContent=L.hand.b;return}
+ if(D.phase==='lobby'){views('lobby');$('lobCode').textContent=D.code;$('lobMsg').textContent=me()===0?'Warte auf Mitspieler …':'Verbinde …'}
+ else if(D.phase==='pick'){views('pick');$('pRound').textContent=D.round+(LOC?' · '+nm(me()).toUpperCase():'');document.querySelector('#v-pick h2').innerHTML=D.mode==='icons'?'Wähle deine <em>Ikone</em>':'Wähle deinen <em>Geheimprofi</em>';const ready=LOC?false:D['r'+me()];$('pickMain').classList.toggle('hidden',ready);$('pickWait').classList.toggle('hidden',!ready);if(ready&&D['k'+me()]!=null)$('myPickName').textContent='🔒 '+P[D['k'+me()]].name;else drawGrid()}
+ else if(D.phase==='play')drawGame();
+ else if(D.phase==='result')drawRes()}
+const ISO=Object.fromEntries('England:ENG;Norwegen:NO;Frankreich:FR;Spanien:ES;Schweden:SE;Argentinien:AR;Schottland:SCT;Belgien:BE;Ukraine:UA;Dänemark:DK;Irland:IE;Niederlande:NL;Brasilien:BR;Ecuador:EC;Kolumbien:CO;Ghana:GH;Senegal:SN;Nigeria:NG;Mexiko:MX;Deutschland:DE;Wales:WLS;Ägypten:EG;Ungarn:HU;Kroatien:HR;Slowenien:SI;Kamerun:CM;Portugal:PT;Neuseeland:NZ;Südkorea:KR;Italien:IT;Japan:JP;Schweiz:CH;Uruguay:UY;Polen:PL;Marokko:MA;Kosovo:XK;Togo:TG;Nordmazedonien:MK;Serbien:RS;Georgien:GE;Armenien:AM;Türkei:TR;Kanada:CA;Island:IS;Montenegro:ME;Slowakei:SK;Rumänien:RO;Bosnien:BA;Äquatorialguinea:GQ;Algerien:DZ;Elfenbeinküste:CI;Kongo:CD;Mali:ML;Gabun:GA;Zentralafrika:CF;Tschechien:CZ;Griechenland:GR;Österreich:AT;Estland:EE;Guinea:GN;USA:US;Nordirland:GB;Liberia:LR;Russland:RU;Bulgarien:BG;Usbekistan:UZ;Tunesien:TN;Südafrika:ZA;Chile:CL;Venezuela:VE;Israel:IL;Albanien:AL;Australien:AU'.split(';').map(x=>x.split(':')));
+function flag(n){const c=ISO[n];if(!c)return'🌍';if(c.length===3){const t='gb'+c.toLowerCase().slice(0,3);return'\u{1F3F4}'+[...t].map(x=>String.fromCodePoint(0xE0000+x.charCodeAt(0))).join('')+'\u{E007F}'}return[...c].map(x=>String.fromCodePoint(127397+x.charCodeAt(0))).join('')}
+const LGC={'Premier League':'PL','LaLiga':'LL','Serie A':'SA','Ligue 1':'L1','Bundesliga':'BL'};
+const CR=Object.fromEntries(`Arsenal|d4202a,fff,X
+Aston Villa|6c1d45,95bfe5,S
+Bournemouth|d71920,111,V
+Brentford|e30613,fff,V
+Brighton|0057b8,fff,V
+Burnley|6c1d45,99d6ea,C
+Chelsea|034694,fff,S
+Crystal Palace|1b458f,c4122e,D
+Everton|003399,fff,S
+Fulham|fff,111,B
+Leeds United|fff,1d428a,S
+Liverpool|c8102e,f6eb61,S
+Manchester City|6cabdd,fff,S
+Manchester United|da291c,fbe122,C
+Newcastle United|111,fff,V
+Nottingham Forest|dd0000,fff,S
+Sunderland|eb172b,fff,V
+Tottenham Hotspur|132257,fff,S
+West Ham United|7a263a,1bb1e7,X
+Wolverhampton|fdb913,111,H
+Alavés|0761af,fff,V
+Athletic Club|ee2523,fff,V
+Atlético Madrid|cb3524,272e61,V
+Barcelona|a50044,004d98,V
+Celta Vigo|8ac3ee,fff,S
+Elche|0a7a3a,fff,D
+Espanyol|007fc8,fff,V
+Getafe|005999,fff,S
+Girona|ce1126,fff,V
+Levante|9a1c2e,004a9c,V
+Mallorca|e20613,111,S
+Osasuna|d91a21,0a1d56,V
+Real Oviedo|1a3d8f,fff,S
+Rayo Vallecano|fff,e20613,D
+Real Betis|0bb363,fff,V
+Real Madrid|fff,febe10,S
+Real Sociedad|0067b1,fff,V
+Sevilla|fff,d4001a,S
+Valencia|fff,111,S
+Villarreal|ffe667,005187,S
+Atalanta|1e71b8,111,V
+Bologna|1a2f5b,c8102e,V
+Cagliari|a40017,002b5c,V
+Como|1d5aa8,fff,V
+Cremonese|8a8d91,c8102e,V
+Fiorentina|5a2d82,fff,S
+Genoa|c8102e,0a2a5c,H
+Hellas Verona|fcd116,0a2a5c,H
+Inter|0068a8,111,V
+Juventus|fff,111,V
+Lazio|87d8f7,fff,S
+Lecce|fcd116,d71920,V
+AC Mailand|e30613,111,V
+Napoli|12a0d7,fff,S
+Parma|fff,fcd116,X
+Pisa|111,1b5eab,V
+AS Rom|8e1f2f,f0bc42,S
+Sassuolo|00a651,111,V
+Torino|8b1a2b,fff,S
+Udinese|fff,111,V
+Angers|fff,111,V
+Auxerre|0057a8,fff,V
+Brest|e30613,fff,B
+Le Havre|5ab3e8,0a2a5c,H
+Lens|e30613,fcd116,V
+Lille|c8102e,0a1f4a,S
+Lorient|f58220,111,B
+Lyon|fff,0a2a8c,S
+Marseille|2faee0,fff,S
+Metz|7d1a2d,fff,S
+Monaco|e30613,fff,D
+Nantes|fcd116,0a7a3a,C
+Nizza|111,c8102e,V
+Paris FC|0a2a5c,fff,C
+Paris Saint-Germain|004170,e30613,X
+Rennes|c8102e,111,V
+Straßburg|0a6fc2,fff,V
+Toulouse|6b2d85,fff,S
+FC Augsburg|bf1e2e,0a6a3a,V
+Union Berlin|e30613,fff,S
+Werder Bremen|1d9053,fff,D
+Borussia Dortmund|fde100,111,S
+Eintracht Frankfurt|e1000f,111,S
+SC Freiburg|111,e30613,V
+Hamburger SV|0a3d91,fff,S
+Heidenheim|e30613,1a3d8f,V
+Hoffenheim|1961b5,fff,S
+1. FC Köln|fff,e30613,S
+RB Leipzig|fff,dd0741,S
+Bayer Leverkusen|e32221,111,S
+Mainz 05|c3141e,fff,S
+Borussia M'gladbach|fff,0a7a3a,V
+Bayern München|dc052d,0066b2,Q
+FC St. Pauli|6b3a1e,fff,S
+VfB Stuttgart|fff,e32219,B
+VfL Wolfsburg|65b32e,fff,S
+Santos|fff,111,V
+Ajax|fff,d2122e,V
+Flamengo|c8102e,111,B
+Dynamo Moskau|1a56a6,fff,S
+Benfica|e30613,fff,S`.split('\n').map(l=>{const[n,v]=l.split('|');return[n,v.split(',')]}));
+const PT={V:'<path d="M2 0h9v46H2zM20 0h9v46h-9z"/>',B:'<rect y="14" width="40" height="11"/>',D:'<path d="M-2 36 34 0h10v8L8 46H-2z"/>',C:'<path d="M0 10l20 14 20-14v12L20 36 0 22z"/>',X:'<path d="M16 0h8v46h-8zM0 12h40v8H0z"/>',H:'<rect x="20" width="20" height="46"/>',S:'<path transform="translate(6 1) scale(.7)" d="M20 4l4 9 9.5 1-7.2 6.400 2.200 9.500L20 24.800l-8.500 5.100 2.200-9.500L6.500 14l9.500-1z"/>',Q:'<path d="M0 0h20v23H0zM20 23h20v23H20z"/>'};
+function crest(c){const[a,b,pt]=CR[c]||['2f8cf0','fff','V'],h=[...c].reduce((x,y)=>x+y.charCodeAt(0),0),sh=['M20 1 38 7v16c0 11-8 18-18 22C10 41 2 34 2 23V7z','M20 3a19 19 0 1 0 .01 0z','M20 1 37 9v22L20 45 3 31V9z'][h%3],t=c.replace(/^(1\. )?(FC|SC|AC|AS|VfB|VfL|RB|SV) /,'').split(/[ .']/).filter(Boolean),ab=(t.length>1?t[0][0]+t[1][0]:t[0].slice(0,3)).toUpperCase();
+return`<svg viewBox="0 0 40 46"><defs><clipPath id="cp${h}"><path d="${sh}"/></clipPath></defs><g clip-path="url(#cp${h})"><rect width="40" height="46" fill="#${a}"/><g fill="#${b}">${PT[pt]}</g><rect x="3" y="19" width="34" height="12" rx="3" fill="#0f2742" opacity=".86"/></g><path d="${sh}" fill="none" stroke="#fff" stroke-width="2.4"/><text x="20" y="28.2" text-anchor="middle" font-size="10" font-weight="800" fill="#fff" font-family="Sora,sans-serif">${ab}</text></svg>`}
+const AT=Object.fromEntries(`Saka:4Kk1;Ødegaard:1Ls0;Saliba:4Kk1;Raya:2Ks1;Declan Rice:1Dk1;Gyökeres:1Ds2;Martinelli:2Ks0;Ollie Watkins:4Kk1;Emiliano Martínez:2Ks1;John McGinn:1Bs1;Cole Palmer:3Kk0;Enzo Fernández:2Ks0;Marc Cucurella:1Dc1;Moisés Caicedo:3Kk0;Reece James:3Kk1;Mohamed Salah:3Kc2;Virgil van Dijk:4Kk2;Florian Wirtz:1Dm0;Dominik Szoboszlai:1Ds1;Alisson:2Ds2;Alexander Isak:1Dm0;Alexis Mac Allister:2Bs1;Ryan Gravenberch:4Kk0;Erling Haaland:1Gl0;Rodri:2Ks1;Phil Foden:1Gs0;Gianluigi Donnarumma:2Ks1;Rúben Dias:2Ks2;Rayan Cherki:3Kc0;Antoine Semenyo:4Kk1;Josko Gvardiol:1Ds1;Bruno Fernandes:2Ks1;Matheus Cunha:2Ds1;Bryan Mbeumo:4Kk1;Benjamin Šeško:1Ds0;André Onana:4Kk0;Kobbie Mainoo:4Kc0;Lisandro Martínez:2Ks1;Bruno Guimarães:2Kc1;Sandro Tonali:1Ds1;Morgan Gibbs-White:3Kk1;Granit Xhaka:1Ds1;Mohammed Kudus:4Kk0;Cristian Romero:2Ks2;James Maddison:1Ds1;Richarlison:3Kk1;Xavi Simons:3Kc0;Jarrod Bowen:1Ls1;Niclas Füllkrug:1Ls2;João Gomes:3Kk1;Hwang Hee-chan:2Ks0;Kaoru Mitoma:2Ks0;Danny Welbeck:4Kk1;Nico Williams:4Kk0;Iñaki Williams:4Kk1;Unai Simón:1Ds1;Antoine Griezmann:1Ls1;Julián Álvarez:2Ks0;Jan Oblak:1Ds1;Koke:1Ds1;Lamine Yamal:3Kc0;Robert Lewandowski:1Ds1;Pedri:2Ds0;Raphinha:3Kk1;Gavi:2Ds0;Marc-André ter Stegen:1Bm1;Ronald Araújo:2Kk2;Frenkie de Jong:1Ls0;Marcus Rashford:4Kk1;Kylian Mbappé:4Kk0;Vinícius Júnior:4Kc1;Jude Bellingham:3Kc1;Thibaut Courtois:1Ds1;Federico Valverde:2Ks1;Rodrygo:3Kk0;Antonio Rüdiger:4Kk1;Trent Alexander-Arnold:3Kk1;Aurélien Tchouaméni:4Kk1;Eduardo Camavinga:4Kc0;Franco Mastantuono:2Ds0;Mikel Oyarzabal:1Ds1;Takefusa Kubo:2Ks0;Isco:2Ds2;Antony:3Kk1;Iago Aspas:1Ds1;Vedat Muriqi:1Dk1;Ademola Lookman:4Kk1;Lautaro Martínez:2Ks1;Marcus Thuram:4Kk1;Nicolò Barella:2Kc2;Alessandro Bastoni:1Ds1;Hakan Çalhanoğlu:2Ks2;Federico Dimarco:1Ds1;Manuel Akanji:3Kk1;Henrikh Mkhitaryan:1Ds2;Kenan Yıldız:2Ks0;Dušan Vlahović:1Ds1;Gleison Bremer:3Kk2;Jonathan David:4Kk0;Rafael Leão:4Kc0;Christian Pulisic:1Ds1;Mike Maignan:4Kk1;Luka Modrić:1Lm0;Fikayo Tomori:4Kk1;Adrien Rabiot:1Bm1;Kevin De Bruyne:1Rs1;Scott McTominay:1Bs1;Romelu Lukaku:4Kk2;Rasmus Højlund:1Gs0;Giovanni Di Lorenzo:1Ds2;André-Frank Zambo Anguissa:4Kk0;Paulo Dybala:2Ds1;Matías Soulé:2Ks0;Manu Koné:4Kk0;Evan Ndicka:4Kk0;Domenico Berardi:1Ds2;Duván Zapata:4Kk1;David de Gea:1Ds2;Moise Kean:4Kk0;Jamie Vardy:1Ls0;Álvaro Morata:1Ds1;Ousmane Dembélé:4Kk1;Achraf Hakimi:3Kk1;Marquinhos:3Kk2;Désiré Doué:3Kk0;Khvicha Kvaratskhelia:1Ks1;Bradley Barcola:3Kk0;Alexandre Lacazette:4Kk1;Mason Greenwood:3Kk1;Pierre-Emerick Aubameyang:4Kk1;Geoffrey Kondogbia:4Kk1;Paul Pogba:4Kk1;Takumi Minamino:2Ks0;Harry Kane:1Ls1;Jamal Musiala:3Kc0;Manuel Neuer:1Lk0;Michael Olise:3Kc0;Luis Díaz:3Kc1;Joshua Kimmich:1Bs1;Dayot Upamecano:4Kk0;Alphonso Davies:4Kk0;Aleksandar Pavlović:1Ds0;Kim Min-jae:2Ks0;Jonathan Tah:1Ds1;Serhou Guirassy:4Kk1;Gregor Kobel:1Ds1;Jobe Bellingham:3Kc0;Karim Adeyemi:4Kk0`.split(';').map(x=>x.split(':')));
+const SK={1:'#f4d3b8',2:'#e3b48a',3:'#c98f62',4:'#9a6240',5:'#5e3a26'},HC={K:'#17120e',D:'#3a2616',B:'#6a4425',L:'#a07a4a',G:'#d9b867',R:'#b5502a',W:'#b8b8b8'};
+function art(p){const a=null,h=p.pos==='TW'?35:hue(p.club),id='k'+p.id,skin=a?SK[a[0]]:'#8d9db3',hair=a?HC[a[1]]:'#566580',st=a?a[2]:'s',bd=a?+a[3]:0;
+const back=st==='l'?`<path d="M33 54c-3 22 0 42 9 48l5-6c-7-12-9-28-8-42zM87 54c3 22 0 42-9 48l-5-6c7-12 9-28 8-42z" fill="${hair}"/>`:'';
+const top={k:'<path d="M37 52c0-20 10-27 23-27s23 7 23 27c-5-9-12-12-23-12s-18 3-23 12z" opacity=".85"/>',s:'<path d="M36 54c-2-24 12-34 24-34s26 10 24 34c-6-10-14-14-24-14s-18 4-24 14z"/>',c:'<path d="M33 58c-6-30 11-40 27-40s33 10 27 40c-2-11-7-18-27-18S35 47 33 58z"/><circle cx="38" cy="38" r="8"/><circle cx="82" cy="38" r="8"/><circle cx="60" cy="27" r="10"/>',m:'<path d="M33 62c-6-34 12-44 27-44s33 10 27 44c-1-15-6-25-27-25S34 47 33 62z"/>',l:'<path d="M33 62c-6-34 12-44 27-44s33 10 27 44c-1-15-6-25-27-25S34 47 33 62z"/>',x:''}[st]||'';
+const beard=bd?`<path d="M36 64c1 18 10 28 24 28s23-10 24-28c-5 8-12 11-24 11S41 72 36 64z" fill="${hair}" opacity="${bd===2?.95:.3}"/>`:'';
+const face=a?`<circle cx="51" cy="62" r="2.2" fill="#2a1d14"/><circle cx="69" cy="62" r="2.2" fill="#2a1d14"/><path d="M53 76q7 4 14 0" stroke="${bd===2?'#e8d8c8':'#2a1d14'}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`:'';
+return`<svg viewBox="0 0 120 150"><defs><linearGradient id="${id}" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="hsl(${h} 72% 52%)"/><stop offset="1" stop-color="hsl(${(h+40)%360} 70% 34%)"/></linearGradient></defs>${back}<path d="M6 150c0-36 22-50 54-54 32 4 54 18 54 54z" fill="url(#${id})"/><path d="M60 96 44 150M60 96 76 150" stroke="#ffffff33" stroke-width="3"/><path d="M46 98l14 16 14-16" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="50" y="80" width="20" height="22" rx="9" fill="${skin}"/><ellipse cx="60" cy="58" rx="24" ry="29" fill="${skin}"/>${beard}<g fill="${hair}">${top}</g>${face}</svg>`}
+const sur=n=>{const w=n.split(' ');return(/^Júnior$/.test(w[1])?w[0]+' JR':w.length>1?w.slice(1).join(' '):n).toUpperCase()};
+function card(p,sl,tag='button'){return`<${tag} class="pl ${sl?'sel':''}" data-id="${p.id}"><div class="fut po-${p.pos}"><div class="fi"><div class="ps"><b>${p.pos}</b><i class="ln"></i><span class="fl">${flag(p.nation)}</span>${crest(p.club)}</div><div class="ar">${art(p)}</div><div class="nm">${p.icon?p.name.toUpperCase():sur(p.name)}</div><div class="cl">${p.club}${p.icon?' · '+p.league:''}</div><div class="sh"></div></div></div></${tag}>`}
+function drawGrid(){const q=$('search').value.toLowerCase(),L=P.filter(p=>(posF==='Alle'||GR[p.pos]===posF)&&(p.name+p.club+p.nation).toLowerCase().includes(q));
+$('chips').innerHTML=['Alle','Torwart','Abwehr','Mittelfeld','Angriff'].map(x=>`<button class="${x===posF?'on':''}" data-p="${x}">${x}</button>`).join('');
+$('chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{posF=b.dataset.p;animGrid=true;drawGrid()});
+$('pleg').innerHTML=POSL.map(c=>`<span><i class="po-${c}"></i>${c}</span>`).join('');const an=animGrid;if(an)lim=120;animGrid=false;$('grid').innerHTML=L.slice(0,lim).map(p=>card(p,sel===p.id)).join('')+(L.length>lim?`<button class="btn" id="moreBtn" style="grid-column:1/-1">Weitere ${Math.min(120,L.length-lim)} von ${L.length-lim} anzeigen</button>`:'');if($('moreBtn'))$('moreBtn').onclick=()=>{lim+=120;drawGrid()};$('grid').classList.toggle('ani',an);$('grid').querySelectorAll('.pl').forEach((e,i)=>e.style.setProperty('--i',Math.min(i,16)));
+$('grid').querySelectorAll('.pl').forEach(b=>b.onclick=()=>{sel=+b.dataset.id;drawGrid()});
+$('selLbl').textContent=sel!=null?'Gewählt: '+P[sel].name:'Noch kein Spieler gewählt.';$('bConfirm').disabled=sel==null}
+const CL=['n','y','m'];function histHtml(h){const w=h.by===me()?'Du':nm(h.by);if(h.t)return`<div class="h"><b>${esc(w)}</b> · Zeit abgelaufen ⏱</div>`;return`<div class="h"><b>${esc(w)}</b> ${h.g!=null?'tippt <b>'+P[h.g].name+'</b>':'prüft'}:<br>${h.v.map((x,i)=>x?`<span class="ck ${['n','y','m'][h.ok[i]]}">${['✕','✓','≈'][h.ok[i]]} ${LB[i]}: ${esc(x)}</span>`:'').join('')}</div>`}
+function drawFx(){const tk=D.turn+'|'+D.history.length,b=$('banner');if(tk!==lastTk){lastTk=tk;b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}
+if(D.history.length!==lastHL){const f=lastHL>=0;lastHL=D.history.length;if(f){$('hist').classList.add('fresh');setTimeout(()=>$('hist').classList.remove('fresh'),1500)}}
+const sc=D.scores.join();if(sc!==lastSc){const f=lastSc!=='';lastSc=sc;if(f){const e=$('score');e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump')}}}
+function drawGame(){views('game');drawFx();const m=me(),o=op(),mine=D.turn===m&&!D.pending&&!D.guess;
+$('nMe').textContent=nm(m);$('nOp').textContent=nm(o);$('dMe').textContent=nm(m)[0];$('dOp').textContent=nm(o)[0];$('ppMe').classList.toggle('act2',D.turn===m);$('ppOp').classList.toggle('act2',D.turn===o);
+$('score').textContent=D.scores[m]+' : '+D.scores[o];$('meta').textContent=(D.mode==='bo3'?'BEST OF 3 · ':D.mode==='timed'?'TIMED · ':D.mode==='icons'?'IKONEN · ':'')+'RUNDE '+D.round;
+$('banner').classList.toggle('me',mine);$('bTxt').textContent=D.pending?(D.pending.by===m?'Prüfung durch '+nm(o)+' …':'Prüfung läuft …'):D.guess?'Tipp wird geprüft …':mine?'🎯 '+(LOC?nm(m)+' ist am Zug':'Du bist am Zug'):LOC&&L.wait?'✅ Zug beendet. Das Ergebnis steht im Verlauf':nm(o)+' überlegt …';
+$('bProbe').disabled=!mine;$('act').classList.toggle('wait',!mine);const cc=cands(m);$('cnt').textContent='Noch möglich: '+cc.length+' von '+P.length+' Spielern';$('bar').style.width=Math.max(2,cc.length/P.length*100)+'%';$('bPass').classList.toggle('hidden',!(LOC&&L.wait));$('bPass').textContent='Gerät an '+nm(D.turn)+' übergeben →';const kn=[null,null,null,null];D.history.forEach(h=>{if(h.by===m&&h.ok)h.ok.forEach((k,i)=>{if(k===1)kn[i]=h.v[i]})});$('known').innerHTML=kn.map((x,i)=>x?`<span class="ck y">✓ ${LB[i]}: ${esc(x)}</span>`:`<span class="ck" style="background:#1b3a5c0d;color:var(--mut)">${LB[i]}: ?</span>`).join('');
+const cur=$('gsel').value;$('gsel').innerHTML='<option value="">Spieler auswählen …</option>'+[...($('allp').checked?P:cc)].sort((a,b)=>a.name.localeCompare(b.name,'de')).map(p=>`<option value="${p.id}">${p.name} </option>`).join('');$('gsel').value=cur;$('bGuess').disabled=!mine;
+$('hist').innerHTML=D.history.slice().reverse().map(histHtml).join('')||'<p class="mut">Noch keine Züge gespielt.</p>'}
+function drawRes(){views('res');const m=me(),won=D.res&&D.res.w===m,bo=D.mode==='bo3',done=!bo||Math.max(...D.scores)>=2;
+{const key=D.round+'|'+D.scores.join();if(lastRes!==key){lastRes=key;if(LOC||won){sfx('win');confetti()}else sfx('lose')}}$('resT').innerHTML=LOC?'<em>'+esc(nm(D.res.w))+'</em> gewinnt'+(bo&&done?' das Match':'!'):won?(bo&&done?'Du gewinnst das <em>Match!</em>':'Du hast <em>gewonnen!</em>'):'<em>'+esc(nm(op()))+'</em> gewinnt'+(bo&&done?' das Match':'');
+$('resS').textContent=D.scores[0]+' : '+D.scores[1];
+[0,1].forEach(i=>{const v=D['rv'+i];$('rv'+i).innerHTML='<small class="mut">'+esc(nm(i))+(i===m?' (du)':'')+'</small>'+(v!=null?card(P[v],false,'div'):'<p>…</p>')});
+$('bNext').textContent=!bo?'Nochmal spielen →':done?'Neues Match →':'Nächste Runde →';$('bNext').onclick=()=>{if(LOC){L.picks=[null,null];L.wait=false;S.role=0;sel=null}up({phase:'pick',round:D.round+1,r0:false,r1:false,pending:null,guess:null,history:[],res:null,rv0:null,rv1:null,k0:null,k1:null,scores:done?[0,0]:D.scores})}}
+const opt=(a,t)=>'<option value="">'+t+'</option>'+a.map(x=>`<option>${x}</option>`).join('');
+$('sPos').innerHTML='<option value="">—</option>'+POSL.map(c=>`<option value="${c}">${c} – ${PN[c]}</option>`).join('');function buildSel(){$('sNat').innerHTML=opt(NATS,'—');$('sLg').innerHTML=opt(LGS,'—');$('lgLbl').textContent=LB[2].toUpperCase();fillClubs()}
+function fillClubs(){const l=$('sLg').value;$('sClub').innerHTML=opt([...new Set(P.filter(p=>!l||P[0].icon||p.league===l).map(p=>p.club))].sort((a,b)=>a.localeCompare(b,'de')),'—')}$('sLg').onchange=fillClubs;setPool('classic');buildSel();selReady=true;
+$('bProbe').onclick=()=>{const v=['sPos','sNat','sLg','sClub'].map(i=>$(i).value);if(!v.some(x=>x))return toast('Wähle mindestens einen Hinweis aus.');act(v)};
+$('sClub').onchange=()=>{if(P[0].icon)return;const p=P.find(x=>x.club===$('sClub').value);if(p&&$('sLg').value!==p.league)$('sLg').value=p.league};$('allp').onchange=()=>render();
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===b));['t1','t2'].forEach(i=>$(i).classList.toggle('hidden',i!==b.dataset.t))});
+let homeArm=0;$('bHome').onclick=()=>{if(!D){leave();return}if(D.phase==='lobby'||D.phase==='result'||Date.now()-homeArm<3500){homeArm=0;leave();return}homeArm=Date.now();toast('Tippe nochmal auf „Start“, um das Spiel zu verlassen.')};
+applyTheme=t=>{document.documentElement.dataset.theme=t;$('themeSel').value=t;store.set('fg_theme',t)};applyTheme(store.get('fg_theme')||'blue');$('themeSel').onchange=()=>applyTheme($('themeSel').value);
+const MI={on:'<svg class="ico" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>',off:'<svg class="ico" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>'};const setMute=()=>{$('bMute').innerHTML=mute?MI.off:MI.on;$('bMute').title=mute?'Ton an':'Ton aus'};setMute();$('bMute').onclick=()=>{mute=!mute;store.set('fg_mute',mute);setMute()};
+$('search').oninput=()=>{animGrid=true;drawGrid()};
+$('bConfirm').onclick=()=>{if(sel==null)return;const id=sel,m=me();sel=null;
+if(LOC){D['k'+m]=id;if(m===0){D.r0=true;S.role=1;L.hand={t:nm(1)+' ist dran',p:'Gib das Gerät an '+nm(1)+' weiter. Die Wahl von '+nm(0)+' bleibt geheim.',b:'Ich bin '+nm(1)+' →'}}else{D.r1=true;D.phase='play';D.turn=(D.round-1)%2;D.ts=Date.now();S.role=D.turn;L.wait=false;L.hand={t:'Los geht’s!',p:nm(D.turn)+' beginnt. Gib das Gerät an '+nm(D.turn)+'.',b:'Spiel starten →'}}render();return}
+up(Object.assign({['r'+m]:true,['k'+m]:id},D['r'+(1-m)]?{phase:'play',turn:(D.round-1)%2,ts:Date.now()}:{}))};
+const fb=(pk,v)=>{const A=[pk.pos,pk.nation,pk.league,pk.club];return v.map((x,i)=>!x?null:x===A[i]?1:(i===0&&GR[x]===GR[pk.pos]?2:0))};
+function cands(m){const hs=D.history.filter(h=>h.by===m&&h.v);return P.filter(p=>{const A=[p.pos,p.nation,p.league,p.club];return hs.every(h=>h.g!==p.id&&h.v.every((x,i)=>{if(!x)return true;const k=h.ok[i];return k===1?A[i]===x:k===2?(A[i]!==x&&GR[A[i]]===GR[x]):(i===0?GR[A[0]]!==GR[x]:A[i]!==x)}))})}
+function act(v,gid){if(!D||D.phase!=='play'||D.turn!==me())return;const m=me(),o=op(),tid=D['k'+o];if(tid==null)return toast('Dein Gegner hat noch keinen Profi gewählt.');if(gid!=null){const g=P[gid];v=[g.pos,g.nation,g.league,g.club]}
+const ok=fb(P[tid],v),e={by:m,v,ok};if(gid!=null)e.g=gid;
+if(gid===tid){const sc=[...D.scores];sc[m]++;up({phase:'result',scores:sc,res:{w:m},rv0:D.k0,rv1:D.k1,history:[...D.history,e]});return}
+sfx(ok.includes(1)?'ok':ok.includes(2)?'part':'no');if(gid!=null)toast('Leider nicht der Gesuchte. '+nm(o)+' ist dran.');if(LOC)L.wait=true;
+up({history:[...D.history,e],turn:o,ts:Date.now()})}
+$('bGuess').onclick=()=>{const v=$('gsel').value;if(v==='')return toast('Wähle erst einen Spieler aus.');act(null,+v)};
+function startLocal(){if(unsub)unsub();unsub=null;LOC=true;code='';L={picks:[null,null],hand:null,wait:false};S={role:0,round:1,pick:null};sel=null;setPool(mode);D={code:'LOKAL',mode,round:1,phase:'pick',n0:name(),n1:($('name2').value.trim()||'Spieler 2').slice(0,18),j:true,r0:false,r1:false,scores:[0,0],turn:0,pending:null,guess:null,history:[],ts:0,res:null,rv0:null,rv1:null};render()}
+$('bLocal').onclick=startLocal;$('hB').onclick=()=>{const h=L.hand;L.hand=null;if(h&&h.fn)h.fn();render()};$('bPass').onclick=()=>{L.wait=false;S.role=D.turn;D.ts=Date.now();render()};
+$('bCreate').onclick=createRoom;$('bJoin').onclick=joinRoom;
+const BASE=location.origin+location.pathname;
+function inviteCode(){for(const x of [location.search,location.hash,document.referrer]){const m=/[?&#]room=([A-Za-z]{4})/.exec(x||'');if(m)return m[1].toUpperCase()}return''}
+function drawRooms(snap){const now=Date.now(),R=snap.docs.map(d=>d.data()).filter(d=>d&&!d.j&&now-(d.t0||0)<2700000&&!store.get('fg_'+d.code));$('rooms').innerHTML=R.length?'<label class="lbl">OFFENE RÄUME</label>'+R.map(d=>`<div class="h" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span><b>${esc(d.n0)}</b> · vor ${Math.max(1,Math.round((now-d.t0)/60000))} Min. · ${d.mode==='bo3'?'Best of 3':d.mode==='timed'?'Timed':d.mode==='icons'?'Ikonen':'Classic'}</span><button class="btn go" style="padding:8px 14px" data-c="${d.code}">Beitreten</button></div>`).join(''):'';$('rooms').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('code').value=b.dataset.c;joinRoom()})}
+$('bInvite').onclick=async()=>{const u=BASE+'?room='+D.code,t='Spiel mit mir Football Guessing! Raumcode: '+D.code;try{if(navigator.share){await navigator.share({title:'Football Guessing',text:t,url:u});return}}catch(e){}try{await navigator.clipboard.writeText(t+'\n'+u);toast('Einladung kopiert')}catch(e){toast('Link: '+u)}};
+$('bInv').onclick=joinRoom;
+$('bSite').onclick=async()=>{const t='Spiel mit mir Football Guessing, das Fußball-Rateduell!';try{if(navigator.share){await navigator.share({title:'Football Guessing',text:t,url:BASE});return}}catch(e){}try{await navigator.clipboard.writeText(t+'\n'+BASE);toast('Link kopiert')}catch(e){toast('Link: '+BASE)}};
+$('bCopy').onclick=async()=>{try{await navigator.clipboard.writeText(D.code);toast('Code kopiert')}catch(e){toast('Code: '+D.code)}};
+setInterval(()=>{if(!D||D.phase!=='play'||D.mode!=='timed'||(LOC&&L.wait))return;if(D.pending||D.guess){$('bTime').textContent='';return}const l=Math.max(0,60-Math.floor((Date.now()-D.ts)/1000));$('bTime').textContent='⏱ '+l+' s';if(l===0&&(D.turn===me()||Date.now()-D.ts>66000)){const k='t'+D.ts;if(acted!==k){acted=k;if(LOC)L.wait=true;up({history:[...D.history,{by:D.turn,t:1}],turn:1-D.turn,ts:Date.now()})}}},1000);
+(async()=>{let user=null;try{if(window.claude){db=await claude.use('db');user=await claude.use('user')}}catch(e){}
+let cw=null;try{if(user&&user.can)cw=await user.can('data.write')}catch(e){}
+const nmsg=$('netmsg');
+if(!db){$('offline').classList.remove('hidden');$('top').textContent='OFFLINE';nmsg.textContent='Online nicht verfügbar: Der Spielserver ist nicht erreichbar.';return}
+if(cw===false){canWrite=false;nmsg.textContent='Du hast nur Leserechte. Zum Spielen braucht der Zugriff die Stufe „Mitwirkender“.';nmsg.style.color='var(--red)'}else nmsg.textContent='Online-Modus bereit.';
+const ic=inviteCode();if(ic){$('code').value=ic;$('invCode').textContent=ic;$('invite').classList.remove('hidden')}
+if(canWrite!==false){try{db.collection('rooms').where('phase','==','lobby').limit(20).onSnapshot(drawRooms,()=>{})}catch(e){}}
+try{const last=store.get('fg_last');if(last){const sn=await db.doc('rooms/'+last).get();const st=store.get('fg_'+last);if(sn&&sn.exists&&st){code=last;S=st;attach()}}}catch(e){}})();
+</script></body></html>

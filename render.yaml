@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: football-guessing
+    runtime: node
+    plan: free
+    buildCommand: echo "kein Build nötig"
+    startCommand: node server.js
